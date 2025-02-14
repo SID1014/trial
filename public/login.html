@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Local Login/Signup</title>
+  <style>
+    /* Basic Reset & box-sizing */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: orange; /* Orange background */
+      color: white;            /* White text */
+      font-family: "Comic Sans MS", cursive, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background-color: #333;  /* Solid dark background (no opacity) */
+      padding: 20px;
+      border-radius: 8px;
+      width: 320px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Add a subtle shadow if you like */
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input[type="email"],
+    input[type="password"] {
+      display: block;        
+      width: 90%;            
+      margin: 8px auto;      
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      font-size: 1em;
+      background-color: #fff; 
+      color: #000;            
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    button:hover {
+      background-color: #555;
+    }
+    .toggle-link {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+      cursor: pointer;
+      text-decoration: underline;
+      color: #ddd;
+    }
+    .error {
+      color: #ffaaaa;
+      font-size: 0.9em;
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Login Form -->
+    <div id="loginDiv">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <input type="email" id="loginEmail" placeholder="Email" required />
+        <input type="password" id="loginPassword" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+      <span class="toggle-link" id="showSignup">Don't have an account? Sign up</span>
+      <div class="error" id="loginError"></div>
+    </div>
+    
+    <!-- Signup Form -->
+    <div id="signupDiv" style="display:none;">
+      <h2>Sign Up</h2>
+      <form id="signupForm">
+        <input type="email" id="signupEmail" placeholder="Email" required />
+        <input type="password" id="signupPassword" placeholder="Password" required />
+        <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required />
+        <button type="submit">Sign Up</button>
+      </form>
+      <span class="toggle-link" id="showLogin">Already have an account? Login</span>
+      <div class="error" id="signupError"></div>
+    </div>
+  </div>
+
+  <script>
+    // Redirect if already logged in
+    if(localStorage.getItem('loggedInUser')) {
+      window.location.href = "dashboard.html";
+    }
+
+    const loginDiv = document.getElementById('loginDiv');
+    const signupDiv = document.getElementById('signupDiv');
+    const showSignup = document.getElementById('showSignup');
+    const showLogin = document.getElementById('showLogin');
+    const loginError = document.getElementById('loginError');
+    const signupError = document.getElementById('signupError');
+
+    // Toggle between forms
+    showSignup.addEventListener('click', () => {
+      loginDiv.style.display = 'none';
+      signupDiv.style.display = 'block';
+      loginError.textContent = "";
+      signupError.textContent = "";
+    });
+
+    showLogin.addEventListener('click', () => {
+      signupDiv.style.display = 'none';
+      loginDiv.style.display = 'block';
+      loginError.textContent = "";
+      signupError.textContent = "";
+    });
+
+    // Helper function to hash password using SHA-256
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Email validation regex
+    function isValidEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    // Password must be at least 8 characters and include uppercase, lowercase, digit, and special character
+    function isValidPassword(password) {
+      const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+      return re.test(password);
+    }
+
+    // Retrieve users from localStorage
+    function getUsers() {
+      const users = localStorage.getItem('users');
+      return users ? JSON.parse(users) : [];
+    }
+
+    // Save users to localStorage
+    function saveUsers(users) {
+      localStorage.setItem('users', JSON.stringify(users));
+    }
+
+    // Handle signup
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      signupError.textContent = "";
+
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPassword').value;
+      const confirmPassword = document.getElementById('signupConfirmPassword').value;
+
+      if (!isValidEmail(email)) {
+        signupError.textContent = "Invalid email format.";
+        return;
+      }
+      if (!isValidPassword(password)) {
+        signupError.textContent = "Password must be at least 8 characters and include uppercase, lowercase, digit, and special character.";
+        return;
+      }
+      if (password !== confirmPassword) {
+        signupError.textContent = "Passwords do not match.";
+        return;
+      }
+
+      const users = getUsers();
+      const existingUser = users.find(user => user.email === email);
+      if(existingUser) {
+        signupError.textContent = "Email already registered.";
+        return;
+      }
+
+      const hashedPassword = await hashPassword(password);
+      users.push({ email: email, password: hashedPassword });
+      saveUsers(users);
+
+      // Auto-login after signup
+      localStorage.setItem('loggedInUser', email);
+      window.location.href = "dashboard.html";
+    });
+
+    // Handle login
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      loginError.textContent = "";
+
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      if (!isValidEmail(email)) {
+        loginError.textContent = "Invalid email format.";
+        return;
+      }
+
+      const users = getUsers();
+      const user = users.find(user => user.email === email);
+      if(!user) {
+        loginError.textContent = "User not found.";
+        return;
+      }
+
+      const hashedPassword = await hashPassword(password);
+      if(user.password !== hashedPassword) {
+        loginError.textContent = "Incorrect password.";
+        return;
+      }
+
+      // Successful login
+      localStorage.setItem('loggedInUser', email);
+      window.location.href = "dashboard.html";
+    });
+  </script>
+</body>
+</html>

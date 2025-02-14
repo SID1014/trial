@@ -9,12 +9,16 @@ app.use(express.static('public'));
 
 // Serve the dashboard
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
 // Serve the solar system quiz
 app.get('/solar-quiz', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'solar_quiz.html'));
+});
+
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
 app.get('/lecture', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'lecture.html'));

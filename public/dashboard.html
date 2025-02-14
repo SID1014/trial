@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +9,13 @@
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif;
             text-align: center;
-            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            background: url("bg_img1.jpg") no-repeat center center fixed;
+            background-size: cover;
             color: white;
             margin: 0;
             padding: 0;
         }
+
         .container {
             display: flex;
             flex-direction: column;
@@ -20,52 +23,116 @@
             justify-content: center;
             height: 100vh;
         }
+
         h1 {
-            font-size: 36px;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            font-size: 60px; /* Increased font size */
+            text-shadow: 3px 3px 8px rgba(255, 255, 0, 0.8);
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff8c00, #ff0080);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 1.5s infinite alternate;
         }
-        .games {
+
+        @keyframes glow {
+            from {
+                text-shadow: 3px 3px 8px rgba(255, 255, 0, 0.8);
+            }
+            to {
+                text-shadow: 5px 5px 12px rgba(255, 105, 180, 0.9);
+            }
+        }
+
+        .modules {
             display: flex;
             justify-content: center;
             gap: 20px;
             margin-top: 30px;
         }
+
+        .module-card,
         .game-card {
             background: white;
             color: black;
             padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             text-decoration: none;
             font-size: 20px;
             font-weight: bold;
             transition: transform 0.3s;
+            cursor: pointer;
+            position: relative;
         }
+
+        .module-card {
+            background: yellow;
+        }
+
+        .module-card:hover,
         .game-card:hover {
             transform: scale(1.1);
         }
-        .score {
-            font-size: 24px;
+
+        .games {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
             margin-top: 20px;
-            background: rgba(255,255,255,0.3);
-            padding: 10px;
-            border-radius: 10px;
+        }
+
+        .score-module {
+            margin-top: 10px;
+            font-size: 18px;
+            color: white;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h1>🎮 Welcome to the Kids Educational Game Page 🎮</h1>
-        <div class="games">
-            <a href="./solar_quiz.html" class="game-card">🚀 Solar System Quiz</a>
-            <a href="./alphabet_game.html" class="game-card">🔠 Alphabet Sorting</a>
-            <a href="./math-quiz.html" class="game-card">Maths Quiz</a>
-            <a href="./lecture.html" class="game-card">Lecture</a>
+        <h1>Welcome to the Kids Educational Game Page</h1>
+        <div class="modules">
+            <div class="module-card" onclick="toggleGames('general-knowledge')">🌍 General Knowledge</div>
+            <div class="module-card" onclick="toggleGames('mathematics')">➗ Mathematics</div>
+            <div class="module-card" onclick="toggleGames('lectures')">📚 Lectures</div>
         </div>
-        <div class="score">Overall Score: <span id="overallScore">0</span></div>
+
+        <div id="general-knowledge" class="games">
+            <a href="./solar_quiz.html" class="game-card" onclick="incrementScore('score-gk')">🚀 Solar System Quiz</a>
+            <a href="./alphabet_game.html" class="game-card" onclick="incrementScore('score-gk')">🔠 Alphabet
+                Sorting</a>
+            <div class="score-module">🌍 General Knowledge Score: <span id="score-gk">0</span></div>
+        </div>
+
+        <div id="mathematics" class="games">
+            <a href="./math-quiz.html" class="game-card" onclick="incrementScore('score-math')">🧮 Maths Quiz</a>
+            <div class="score-module">➗ Mathematics Score: <span id="score-math">0</span></div>
+        </div>
+
+        <div id="lectures" class="games">
+            <a href="./lecture.html" class="game-card">📖 Educational Lectures</a>
+        </div>
     </div>
+
     <script>
-        document.getElementById("overallScore").textContent = localStorage.getItem("overallScore") || 0;
+        function toggleGames(moduleId) {
+            document.querySelectorAll('.games').forEach(gameSection => {
+                gameSection.style.display = 'none';
+            });
+            document.getElementById(moduleId).style.display = 'flex';
+        }
+
+        function incrementScore(scoreId) {
+            let score = localStorage.getItem(scoreId) || 0;
+            score = parseInt(score) + 1;
+            localStorage.setItem(scoreId, score);
+            document.getElementById(scoreId).textContent = score;
+        }
+
+        document.getElementById("score-gk").textContent = localStorage.getItem("score-gk") || 0;
+        document.getElementById("score-math").textContent = localStorage.getItem("score-math") || 0;
     </script>
 </body>
+
 </html>

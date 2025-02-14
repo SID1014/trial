@@ -11,100 +11,173 @@
             background: url('https://source.unsplash.com/1600x900/?space,galaxy') no-repeat center center fixed;
             background-size: cover;
             color: white;
-            background-color: black;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
+        .quiz-container {
             background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-            border: 2px solid aqua;
-
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .quiz-container::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 100px;
+            height: 100px;
+            background-color: #ffcc00;
+            border-radius: 50%;
+            z-index: -1;
+        }
+        .quiz-container::after {
+            content: "";
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 100px;
+            height: 100px;
+            background-color: #ff5733;
+            border-radius: 50%;
+            z-index: -1;
         }
         h1 {
             color: #ffcc00;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
         }
         .question {
-            font-size: 20px;
             margin: 20px 0;
+            font-size: 1.2em;
         }
-        button {
-            background: #007BFF;
-            color: white;
+        label {
+            display: block;
+            margin: 10px 0;
             padding: 10px;
-            margin: 10px;
-            border: none;
+            background-color: #283593;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 16px;
+            transition: background-color 0.3s;
+            color: white;
         }
-        .options button:hover {
-            background: #0056b3;
+        label:hover {
+            background-color: #3949ab;
         }
-        #result {
-            font-size: 22px;
+        input[type="radio"] {
+            display: none;
+        }
+        input[type="radio"]:checked + label {
+            background-color: #1e88e5;
+            color: white;
+        }
+        .buttons {
             margin-top: 20px;
-            font-weight: bold;
+        }
+        .buttons button {
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 10px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        .buttons button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
-<body  bgcolor="Black">
-    <div class="container">
-        <h1>Solar System Quiz 🌍🌟</h1>
-        <p class="question" id="question">Loading question...</p>
-        <div class="options" id="options"></div>
-        <p id="result"></p>
-        <div>
-            <button class="play-again" onclick="'/'">Play Again</button>
-            <button class="dashboard" onclick="window.location.href='/'">Back to Dashboard</button>
+<body>
+    <div class="quiz-container">
+        <h1>Solar System Quiz! 🚀</h1>
+        <div id="question-container">Loading your question...</div>
+        <div class="buttons">
+            <button id="retry-button" style="display: none;" onclick="restartQuiz()">Play Again 🔄</button>
+            <button onclick="window.location.href='/'">Return to Dashboard 🏠</button>
         </div>
     </div>
+
     <script>
-        const quizData = [
-            { question: "What is the largest planet in our solar system?", options: ["Earth", "Jupiter", "Mars", "Venus"], answer: "Jupiter" },
-            { question: "Which planet is known as the Red Planet?", options: ["Mars", "Saturn", "Neptune", "Mercury"], answer: "Mars" },
-            { question: "What celestial body is at the center of our solar system?", options: ["Moon", "Earth", "Sun", "Pluto"], answer: "Sun" },
-        ];
-        
+        const GEMINI_API_KEY = "AIzaSyBmIWZ5prsO4q912tcv1CmMu0I7UXBe2-c";
+        const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+        let questionBank = [];
         let currentQuestionIndex = 0;
-        const questionElement = document.getElementById("question");
-        const optionsElement = document.getElementById("options");
-        const resultElement = document.getElementById("result");
-        
-        function loadQuestion() {
-            const currentQuestion = quizData[currentQuestionIndex];
-            questionElement.textContent = currentQuestion.question;
-            optionsElement.innerHTML = "";
-            currentQuestion.options.forEach(option => {
-                const button = document.createElement("button");
-                button.textContent = option;
-                button.onclick = () => checkAnswer(option);
-                optionsElement.appendChild(button);
-            });
-        }
-        
-        function checkAnswer(selectedOption) {
-            const correctAnswer = quizData[currentQuestionIndex].answer;
-            if (selectedOption === correctAnswer) {
-                resultElement.textContent = "Correct! 🎉";
-                resultElement.style.color = "#28a745";
-                let overallScore = localStorage.getItem("overallScore") || 0;
-                overallScore = parseInt(overallScore) + 1;
-                localStorage.setItem("overallScore", overallScore);
-            } else {
-                resultElement.textContent = "Wrong! Try again. ❌";
-                resultElement.style.color = "#dc3545";
+        let score = 0;
+
+        async function fetchQuestions() {
+            const requestBody = {
+                contents: [{ role: "user", parts: [{ text: "Generate 10 unique solar system general knowledge questions for kids with four multiple-choice answers each. Return JSON format: [{question: '', options: [], answer: ''}, ...]." }] }]
+            };
+            try {
+                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(requestBody),
+                });
+                if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+                const data = await response.json();
+                let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+                rawText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
+                questionBank = JSON.parse(rawText);
+                currentQuestionIndex = 0;
+                showQuestion();
+            } catch (error) {
+                console.error("❌ Error fetching questions:", error);
+                document.getElementById("question-container").innerHTML = "⚠️ Error loading questions. Please refresh!";
             }
-            setTimeout(() => {
-                resultElement.textContent = "";
-                currentQuestionIndex = (currentQuestionIndex + 1) % quizData.length;
-                loadQuestion();
-            }, 2000);
         }
-        
-        loadQuestion();
+
+        function showQuestion() {
+            if (currentQuestionIndex >= questionBank.length) {
+                document.getElementById("question-container").innerHTML = `<h2>Quiz Completed! 🎉</h2><p>Your Score: ${score}/${questionBank.length}</p>`;
+                document.getElementById("retry-button").style.display = "inline-block";
+                return;
+            }
+            const questionData = questionBank[currentQuestionIndex];
+            document.getElementById("question-container").innerHTML = `
+                <div class="question">
+                    <h2>${questionData.question}</h2>
+                    ${questionData.options.map(option => `
+                        <div>
+                            <input type="radio" name="option" value="${option}" id="${option}">
+                            <label for="${option}" onclick="checkAnswer('${option}')">${option}</label>
+                        </div>
+                    `).join('')}
+                </div>
+                <p id="feedback"></p>
+            `;
+        }
+
+        function checkAnswer(selectedAnswer) {
+            const correctAnswer = questionBank[currentQuestionIndex].answer;
+            document.getElementById("feedback").textContent = selectedAnswer === correctAnswer ? "✅ Correct! Well done!" : `❌ Incorrect. The correct answer was: ${correctAnswer}`;
+            if (selectedAnswer === correctAnswer) score++;
+            currentQuestionIndex++;
+            setTimeout(showQuestion, 1000);
+        }
+
+        function restartQuiz() {
+            score = 0;
+            currentQuestionIndex = 0;
+            document.getElementById("retry-button").style.display = "none";
+            fetchQuestions();
+        }
+
+        fetchQuestions();
     </script>
 </body>
 </html>
