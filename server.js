@@ -7,37 +7,38 @@ const port = 3000;
 
 app.use(express.static('public'));
 
-// Serve the dashboard
+// Always serve the login page first
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
-// Serve the solar system quiz
+// Other routes
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+});
+
 app.get('/solar-quiz', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'solar_quiz.html'));
 });
 
-app.get('/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
-});
 app.get('/lecture', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'lecture.html'));
 });
 
-// Serve the alphabet sorting game
 app.get('/alphabet-game', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'alphabet_game.html'));
 });
+
 app.get('/maths-quiz', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'math-quiz.html'));
 });
 
-// Serve overall score
 app.get('/score', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'score.html'));
 });
 
+// Start server and open login page on launch
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
-    open(`http://localhost:${port}`); // Open dashboard on start
+    open(`http://localhost:${port}`); // Open login page on start
 });
