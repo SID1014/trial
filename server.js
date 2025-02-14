@@ -16,13 +16,16 @@ app.get('/', (req, res) => {
 app.get('/solar-quiz', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'solar_quiz.html'));
 });
+app.get('/lecture', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'lecture.html'));
+});
 
 // Serve the alphabet sorting game
 app.get('/alphabet-game', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'alphabet_game.html'));
 });
 app.get('/maths-quiz', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'maths-quiz.html'));
+    res.sendFile(path.join(__dirname, 'public', 'math-quiz.html'));
 });
 
 // Serve overall score
