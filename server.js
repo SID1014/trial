@@ -21,6 +21,9 @@ app.get('/solar-quiz', (req, res) => {
 app.get('/alphabet-game', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'alphabet_game.html'));
 });
+app.get('/maths-quiz', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'maths-quiz.html'));
+});
 
 // Serve overall score
 app.get('/score', (req, res) => {

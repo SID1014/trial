@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Quiz</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #ffeb3b, #ff9800);
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 36px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+        .quiz-box {
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 300px;
+        }
+        .question {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .answer-input {
+            font-size: 18px;
+            padding: 10px;
+            width: 80%;
+            border-radius: 10px;
+            border: 2px solid #ff9800;
+        }
+        .submit-btn {
+            background: #ff5722;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .submit-btn:hover {
+            transform: scale(1.1);
+        }
+        .score {
+            font-size: 24px;
+            margin-top: 20px;
+            background: rgba(255,255,255,0.3);
+            padding: 10px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧮 Fun Math Quiz! 🎉</h1>
+        <div class="quiz-box">
+            <div class="question" id="question">Loading...</div>
+            <input type="number" id="answer" class="answer-input" placeholder="Your answer">
+            <button class="submit-btn" onclick="checkAnswer()">Submit</button>
+            <button class="submit-btn" onclick="window.location.href='/'">Return to Dashboard</button>
+            <p id="feedback"></p>
+        </div>
+        <div class="score">Overall Score: <span id="overallScore">0</span></div>
+    </div>
+    <script>
+        let num1, num2, correctAnswer;
+
+        function generateQuestion() {
+            num1 = Math.floor(Math.random() * 10) + 1;
+            num2 = Math.floor(Math.random() * 10) + 1;
+            correctAnswer = num1 + num2;
+            document.getElementById("question").textContent = `What is ${num1} + ${num2}?`;
+            document.getElementById("answer").value = "";
+            document.getElementById("feedback").textContent = "";
+        }
+
+        function checkAnswer() {
+            let userAnswer = parseInt(document.getElementById("answer").value);
+            let feedback = document.getElementById("feedback");
+            let overallScore = localStorage.getItem("overallScore") || 0;
+
+            if (userAnswer === correctAnswer) {
+                feedback.textContent = "🎉 Correct! Great job!";
+                feedback.style.color = "green";
+                overallScore = parseInt(overallScore) + 1;
+            } else {
+                feedback.textContent = "❌ Oops! Try again!";
+                feedback.style.color = "red";
+            }
+
+            localStorage.setItem("overallScore", overallScore);
+            document.getElementById("overallScore").textContent = overallScore;
+            setTimeout(generateQuestion, 2000);
+        }
+
+        document.getElementById("overallScore").textContent = localStorage.getItem("overallScore") || 0;
+        generateQuestion();
+    </script>
+</body>
+</html>
