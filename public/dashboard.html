@@ -6,23 +6,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Dashboard</title>
     <style>
+        /* General Styles */
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif;
             text-align: center;
-            background: #87CEEB; /* Light sky blue background */
             color: white;
             margin: 0;
             padding: 0;
             overflow: hidden;
+            position: relative;
+            background: linear-gradient(-45deg, #fc7e5f, #fba665, #ee6f6f, #e5b355);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
         }
 
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Particle Animation */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particles span {
+            position: absolute;
+            display: block;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 5s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+            100% {
+                transform: translateY(0) rotate(360deg);
+            }
+        }
+
+        .particles span:nth-child(1) {
+            top: 10%;
+            left: 20%;
+            animation-duration: 8s;
+        }
+
+        .particles span:nth-child(2) {
+            top: 30%;
+            left: 50%;
+            animation-duration: 12s;
+        }
+
+        .particles span:nth-child(3) {
+            top: 50%;
+            left: 70%;
+            animation-duration: 10s;
+        }
+
+        .particles span:nth-child(4) {
+            top: 70%;
+            left: 10%;
+            animation-duration: 9s;
+        }
+
+        .particles span:nth-child(5) {
+            top: 90%;
+            left: 40%;
+            animation-duration: 11s;
+        }
+
+        /* Animated Cartoon Characters */
+        .animated-cartoons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .animated-cartoons span {
+            position: absolute;
+            display: block;
+            font-size: 50px;
+            animation: float 10s infinite ease-in-out;
+        }
+
+        .animated-cartoons span:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-duration: 8s;
+        }
+
+        .animated-cartoons span:nth-child(2) {
+            top: 40%;
+            left: 60%;
+            animation-duration: 12s;
+        }
+
+        .animated-cartoons span:nth-child(3) {
+            top: 60%;
+            left: 30%;
+            animation-duration: 10s;
+        }
+
+        .animated-cartoons span:nth-child(4) {
+            top: 80%;
+            left: 70%;
+            animation-duration: 9s;
+        }
+
+        .animated-cartoons span:nth-child(5) {
+            top: 10%;
+            left: 80%;
+            animation-duration: 11s;
+        }
+
+        /* Username Input */
         .username {
             position: absolute;
             top: 10px;
             left: 20px;
             font-size: 22px;
             font-weight: bold;
-            background: linear-gradient(90deg, #ff8c00, #ff0080);
+            background: linear-gradient(90deg, #8c0f03, #604d01);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             padding: 10px;
@@ -41,18 +169,21 @@
             outline: none;
         }
 
+        /* Main Container */
         .container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
+            position: relative;
+            z-index: 1;
         }
 
         h1 {
             font-size: 60px;
             font-weight: bold;
-            background: linear-gradient(90deg, #ff8c00, #ff0080);
+            background: linear-gradient(90deg, #6208bc, #0be3e0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin: 0;
@@ -60,6 +191,7 @@
             border-radius: 15px;
         }
 
+        /* Module Cards */
         .modules {
             display: flex;
             justify-content: center;
@@ -78,94 +210,39 @@
             position: relative;
             text-align: center;
             width: 220px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .module-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
         }
 
         .module-card:nth-child(1) {
-            background: linear-gradient(45deg, #32CD32, #228B22);
-            color: white;
-            box-shadow: 0px 4px 10px rgba(50, 205, 50, 0.5);
-            border: 2px solid white;
-            text-transform: uppercase;
-            animation: glowGreen 1.5s infinite alternate;
+            background: linear-gradient(45deg, #ff619b, #9500ff);
+            animation: glowOrange 1.5s infinite alternate;
         }
 
-        @keyframes glowGreen {
+        @keyframes glowOrange {
             from {
-                box-shadow: 0px 0px 10px rgba(50, 205, 50, 0.7);
+                box-shadow: 0px 0px 10px rgba(245, 81, 66, 0.7);
             }
             to {
-                box-shadow: 0px 0px 20px rgba(50, 255, 50, 1);
+                box-shadow: 0px 0px 20px rgb(180, 145, 3);
             }
         }
 
         .module-card:nth-child(2) {
-            background: linear-gradient(45deg, #1E90FF, #00008B);
-            color: white;
-            box-shadow: 0px 4px 10px rgba(30, 144, 255, 0.5);
-            border: 3px solid white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .module-card:nth-child(2)::before {
-            content: "";
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            width: 100%;
-            height: 100%;
-            border: 3px solid cyan;
-            animation: rotateBorder 2s linear infinite;
-        }
-
-        @keyframes rotateBorder {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
         }
 
         .module-card:nth-child(3) {
-            background: linear-gradient(45deg, #FF4500, #B22222);
-            color: white;
-            box-shadow: 0px 4px 10px rgba(255, 69, 0, 0.5);
-            border: 2px solid white;
-            font-style: italic;
-            animation: bounceRed 1.5s infinite alternate;
+            background: linear-gradient(45deg, #f86469, #f35bc7);
         }
 
-        @keyframes bounceRed {
-            0% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-5px);
-            }
-            100% {
-                transform: translateY(0);
-            }
-        }
-
-        /* Updated Animation for General Knowledge */
-        .module-card:nth-child(1) span {
-            display: inline-block;
-            animation: wave 1.5s infinite ease-in-out;
-        }
-
-        @keyframes wave {
-            0% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-5px) rotate(-5deg);
-            }
-            100% {
-                transform: translateY(0);
-            }
-        }
-
+        /* Games Section */
         .games {
             display: none;
             margin-top: 20px;
@@ -190,18 +267,6 @@
             animation: wiggle 0.5s ease-in-out;
         }
 
-        @keyframes float {
-            0% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(0);
-            }
-        }
-
         @keyframes wiggle {
             0%, 100% { transform: rotate(0deg); }
             25% { transform: rotate(5deg); }
@@ -209,6 +274,7 @@
             75% { transform: rotate(5deg); }
         }
 
+        /* Score Module */
         .score-module {
             margin-top: 20px;
             font-size: 24px;
@@ -227,21 +293,28 @@
                 transform: scale(1);
             }
         }
-
-        @keyframes flip {
-            0% { transform: rotateX(0deg); }
-            50% { transform: rotateX(90deg); }
-            100% { transform: rotateX(0deg); }
-        }
-
-        .score-module span {
-            display: inline-block;
-            animation: flip 0.5s ease-in-out;
-        }
     </style>
 </head>
 
 <body>
+ 
+    <div class="particles">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="animated-cartoons">
+        <span>🐱</span>
+        <span>🐶</span>
+        <span>🦄</span>
+        <span>🐧</span>
+        <span>🐘</span>
+    </div>
+
+   
     <div class="username">User: <input type="text" id="usernameInput" placeholder="Enter your name"></div>
     <div class="container">
         <h1>Welcome to the Kids Educational Game Page</h1>
@@ -265,6 +338,7 @@
 
         <div id="mathematics" class="games">
             <a href="./math-quiz.html" class="game-card" onclick="incrementScore('score-math')">🧮 Maths Quiz</a>
+            <a href="./shape-matching.html" class="game-card" onclick="incrementScore('score-math')"> Quiz</a>
             <div class="score-module">➗ Mathematics Score: <span id="score-math">0</span></div>
         </div>
 
@@ -274,25 +348,30 @@
     </div>
 
     <script>
-        // Fetch username from localStorage or set to "Guest"
+        // Your existing JavaScript code
         const usernameInput = document.getElementById("usernameInput");
         const storedUsername = localStorage.getItem("username");
         usernameInput.value = storedUsername || "Guest";
 
-        // Save username to localStorage when input changes
         usernameInput.addEventListener("input", () => {
-            localStorage.setItem("username", usernameInput.value);
+            const username = usernameInput.value.trim() || "Guest";
+            localStorage.setItem("username", username);
+            loadScores(username);
         });
 
-        // Prevent form submission on Enter key
         usernameInput.addEventListener("keypress", function (event) {
             if (event.key === "Enter") {
                 event.preventDefault();
-                this.blur(); // Removes focus from input after entering name
+                this.blur();
             }
         });
 
-        // Toggle game sections
+        function loadScores(username) {
+            const scores = JSON.parse(localStorage.getItem(`${username}-scores`) || "{}");
+            document.getElementById("score-gk").textContent = scores.generalKnowledge || 0;
+            document.getElementById("score-math").textContent = scores.mathematics || 0;
+        }
+
         function toggleGames(moduleId) {
             const games = document.querySelectorAll('.games');
             games.forEach(game => {
@@ -304,13 +383,21 @@
             });
         }
 
-        // Increment score
         function incrementScore(scoreId) {
-            const scoreElement = document.getElementById(scoreId);
-            let score = parseInt(scoreElement.textContent);
-            score += 1;
-            scoreElement.textContent = score;
+            const username = localStorage.getItem("username") || "Guest";
+            const scores = JSON.parse(localStorage.getItem(`${username}-scores`) || "{}");
+
+            if (scoreId === "score-gk") {
+                scores.generalKnowledge = (scores.generalKnowledge || 0) + 1;
+            } else if (scoreId === "score-math") {
+                scores.mathematics = (scores.mathematics || 0) + 1;
+            }
+
+            localStorage.setItem(`${username}-scores`, JSON.stringify(scores));
+            document.getElementById(scoreId).textContent = scores[scoreId.replace("score-", "")] || 0;
         }
+
+        loadScores(storedUsername || "Guest");
     </script>
 </body>
 
@@ -323,24 +410,107 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Dashboard</title>
     <style>
-        /* Your existing CSS styles */
+        /* General Styles */
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif;
             text-align: center;
-            background: #87CEEB; /* Light sky blue background */
-            color: white;
+            color: var(--text-color);
             margin: 0;
             padding: 0;
             overflow: hidden;
+            position: relative;
+            background: var(--background-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
         }
 
+        :root {
+            --background-gradient: linear-gradient(-45deg, #fc7e5f, #fba665, #ee6f6f, #e5b355);
+            --text-color: white;
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --card-border: rgba(255, 255, 255, 0.2);
+            --card-hover-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        body.dark-mode {
+            --background-gradient: linear-gradient(-45deg, #1a1a1a, #2c3e50, #34495e, #2c3e50);
+            --text-color: #ffffff;
+            --card-bg: rgba(0, 0, 0, 0.3);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --card-hover-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Particle Animation */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particles span {
+            position: absolute;
+            display: block;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 5s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+
+        .particles span:nth-child(1) { top: 10%; left: 20%; animation-duration: 8s; }
+        .particles span:nth-child(2) { top: 30%; left: 50%; animation-duration: 12s; }
+        .particles span:nth-child(3) { top: 50%; left: 70%; animation-duration: 10s; }
+        .particles span:nth-child(4) { top: 70%; left: 10%; animation-duration: 9s; }
+        .particles span:nth-child(5) { top: 90%; left: 40%; animation-duration: 11s; }
+
+        /* Animated Cartoon Characters */
+        .animated-cartoons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .animated-cartoons span {
+            position: absolute;
+            display: block;
+            font-size: 50px;
+            animation: float 10s infinite ease-in-out;
+        }
+
+        .animated-cartoons span:nth-child(1) { top: 20%; left: 10%; animation-duration: 8s; }
+        .animated-cartoons span:nth-child(2) { top: 40%; left: 60%; animation-duration: 12s; }
+        .animated-cartoons span:nth-child(3) { top: 60%; left: 30%; animation-duration: 10s; }
+        .animated-cartoons span:nth-child(4) { top: 80%; left: 70%; animation-duration: 9s; }
+        .animated-cartoons span:nth-child(5) { top: 10%; left: 80%; animation-duration: 11s; }
+
+        /* Username Input */
         .username {
             position: absolute;
             top: 10px;
             left: 20px;
             font-size: 22px;
             font-weight: bold;
-            background: linear-gradient(90deg, #ff8c00, #ff0080);
+            background: linear-gradient(90deg, #8c0f03, #604d01);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             padding: 10px;
@@ -352,25 +522,28 @@
             font-size: 18px;
             border: none;
             background: transparent;
-            color: white;
+            color: var(--text-color);
             font-weight: bold;
             text-align: left;
             width: 120px;
             outline: none;
         }
 
+        /* Main Container */
         .container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
+            position: relative;
+            z-index: 1;
         }
 
         h1 {
             font-size: 60px;
             font-weight: bold;
-            background: linear-gradient(90deg, #ff8c00, #ff0080);
+            background: linear-gradient(90deg, #6208bc, #0be3e0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin: 0;
@@ -378,6 +551,7 @@
             border-radius: 15px;
         }
 
+        /* Module Cards */
         .modules {
             display: flex;
             justify-content: center;
@@ -396,94 +570,30 @@
             position: relative;
             text-align: center;
             width: 220px;
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .module-card:hover {
+            transform: scale(1.05);
+            box-shadow: var(--card-hover-shadow);
         }
 
         .module-card:nth-child(1) {
-            background: linear-gradient(45deg, #32CD32, #228B22);
-            color: white;
-            box-shadow: 0px 4px 10px rgba(50, 205, 50, 0.5);
-            border: 2px solid white;
-            text-transform: uppercase;
-            animation: glowGreen 1.5s infinite alternate;
+            background: linear-gradient(45deg, #ff619b, #9500ff);
+            animation: glowOrange 1.5s infinite alternate;
         }
 
-        @keyframes glowGreen {
-            from {
-                box-shadow: 0px 0px 10px rgba(50, 205, 50, 0.7);
-            }
-            to {
-                box-shadow: 0px 0px 20px rgba(50, 255, 50, 1);
-            }
+        @keyframes glowOrange {
+            from { box-shadow: 0px 0px 10px rgba(245, 81, 66, 0.7); }
+            to { box-shadow: 0px 0px 20px rgb(180, 145, 3); }
         }
 
-        .module-card:nth-child(2) {
-            background: linear-gradient(45deg, #1E90FF, #00008B);
-            color: white;
-            box-shadow: 0px 4px 10px rgba(30, 144, 255, 0.5);
-            border: 3px solid white;
-            position: relative;
-            overflow: hidden;
-        }
+        .module-card:nth-child(2) { background: linear-gradient(45deg, #6a11cb, #2575fc); }
+        .module-card:nth-child(3) { background: linear-gradient(45deg, #f86469, #f35bc7); }
 
-        .module-card:nth-child(2)::before {
-            content: "";
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            width: 100%;
-            height: 100%;
-            border: 3px solid cyan;
-            animation: rotateBorder 2s linear infinite;
-        }
-
-        @keyframes rotateBorder {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .module-card:nth-child(3) {
-            background: linear-gradient(45deg, #FF4500, #B22222);
-            color: white;
-            box-shadow: 0px 4px 10px rgba(255, 69, 0, 0.5);
-            border: 2px solid white;
-            font-style: italic;
-            animation: bounceRed 1.5s infinite alternate;
-        }
-
-        @keyframes bounceRed {
-            0% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-5px);
-            }
-            100% {
-                transform: translateY(0);
-            }
-        }
-
-        /* Updated Animation for General Knowledge */
-        .module-card:nth-child(1) span {
-            display: inline-block;
-            animation: wave 1.5s infinite ease-in-out;
-        }
-
-        @keyframes wave {
-            0% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-5px) rotate(-5deg);
-            }
-            100% {
-                transform: translateY(0);
-            }
-        }
-
+        /* Games Section */
         .games {
             display: none;
             margin-top: 20px;
@@ -495,38 +605,24 @@
             margin: 10px 0;
             border-radius: 10px;
             background: rgba(255, 255, 255, 0.2);
-            color: white;
+            color: var(--text-color);
             text-decoration: none;
             font-size: 24px;
             transition: background 0.3s, transform 0.3s;
-            animation: float 3s infinite ease-in-out;
+            animation: bounce 2s infinite ease-in-out;
         }
 
         .game-card:hover {
             background: rgba(255, 255, 255, 0.4);
             transform: scale(1.05);
-            animation: wiggle 0.5s ease-in-out;
         }
 
-        @keyframes float {
-            0% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(0);
-            }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(5deg); }
-            50% { transform: rotate(-5deg); }
-            75% { transform: rotate(5deg); }
-        }
-
+        /* Score Module */
         .score-module {
             margin-top: 20px;
             font-size: 24px;
@@ -535,31 +631,174 @@
         }
 
         @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-            }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
-        @keyframes flip {
-            0% { transform: rotateX(0deg); }
-            50% { transform: rotateX(90deg); }
-            100% { transform: rotateX(0deg); }
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
         }
 
-        .score-module span {
-            display: inline-block;
-            animation: flip 0.5s ease-in-out;
+        /* Feedback Section */
+        .feedback-section {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            text-align: left;
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 10px;
+            padding: 15px;
+            display: none; /* Hidden by default */
+            z-index: 2;
+        }
+
+        .feedback-section textarea {
+            width: 200px;
+            height: 60px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid var(--card-border);
+            background: var(--card-bg);
+            color: var(--text-color);
+            outline: none;
+        }
+
+        .feedback-section button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Feedback Toggle Button */
+        .feedback-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: white;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            position: absolute;
+            top: 10px;
+            right: 80px;
+        }
+
+        .language-selector select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 2px solid var(--card-border);
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            text-align: right;
+        }
+
+        .progress-tracker h3 {
+            margin-bottom: 10px;
+        }
+
+        .progress-tracker div {
+            margin-bottom: 5px;
+        }
+
+        /* Clear Data Section */
+        .clear-data {
+            position: absolute;
+            bottom: 100px;
+            right: 20px;
+        }
+
+        .clear-data button {
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(45deg, #f86469, #f35bc7);
+            color: white;
+            cursor: pointer;
         }
     </style>
 </head>
 
 <body>
+    <!-- Particle Animation -->
+    <div class="particles">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- Animated Cartoon Characters -->
+    <div class="animated-cartoons">
+        <span>🐱</span>
+        <span>🐶</span>
+        <span>🦄</span>
+        <span>🐧</span>
+        <span>🐘</span>
+    </div>
+
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</div>
+
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <select id="language-select" onchange="changeLanguage()">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+        </select>
+    </div>
+
+    <!-- Feedback Toggle Button -->
+    <button class="feedback-toggle" onclick="toggleFeedback()">Give Feedback</button>
+
+    <!-- Feedback Section -->
+    <div class="feedback-section">
+        <h3>Feedback</h3>
+        <textarea id="feedback-input" placeholder="Your feedback..."></textarea>
+        <button onclick="submitFeedback()">Submit</button>
+        <p>Contact: 9322635506</p>
+    </div>
+
+    <!-- Progress Tracker -->
+    <div class="progress-tracker">
+        <h3>Progress</h3>
+        <div>General Knowledge: <span id="progress-gk">0%</span></div>
+        <div>Mathematics: <span id="progress-math">0%</span></div>
+    </div>
+
+    <!-- Clear Data Section -->
+    <div class="clear-data">
+        <button onclick="clearData()">Clear All Data</button>
+    </div>
+
+    <!-- Your existing HTML content -->
     <div class="username">User: <input type="text" id="usernameInput" placeholder="Enter your name"></div>
     <div class="container">
         <h1>Welcome to the Kids Educational Game Page</h1>
@@ -583,6 +822,7 @@
 
         <div id="mathematics" class="games">
             <a href="./math-quiz.html" class="game-card" onclick="incrementScore('score-math')">🧮 Maths Quiz</a>
+            <a href="./shape-matching.html" class="game-card" onclick="incrementScore('score-math')">Geometry Quiz</a>
             <div class="score-module">➗ Mathematics Score: <span id="score-math">0</span></div>
         </div>
 
@@ -592,67 +832,64 @@
     </div>
 
     <script>
-        // Fetch username from localStorage or set to "Guest"
-        const usernameInput = document.getElementById("usernameInput");
-        const storedUsername = localStorage.getItem("username");
-        usernameInput.value = storedUsername || "Guest";
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
+        }
 
-        // Save username to localStorage when input changes
-        usernameInput.addEventListener("input", () => {
-            const username = usernameInput.value.trim() || "Guest";
-            localStorage.setItem("username", username);
-            loadScores(username); // Load scores for the new username
-        });
+        // Check for saved dark mode preference
+        if (localStorage.getItem("dark-mode") === "true") {
+            document.body.classList.add("dark-mode");
+        }
 
-        // Prevent form submission on Enter key
-        usernameInput.addEventListener("keypress", function (event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                this.blur(); // Removes focus from input after entering name
+        // Language Selector
+        function changeLanguage() {
+            const selectedLanguage = document.getElementById("language-select").value;
+            localStorage.setItem("language", selectedLanguage);
+            alert(`Language changed to ${selectedLanguage}.`);
+        }
+
+        // Feedback Section Toggle
+        function toggleFeedback() {
+            const feedbackSection = document.querySelector(".feedback-section");
+            feedbackSection.style.display = feedbackSection.style.display === "block" ? "none" : "block";
+        }
+
+        // Feedback Submission
+        function submitFeedback() {
+            const feedback = document.getElementById("feedback-input").value;
+            if (feedback.trim() === "") {
+                alert("Please enter your feedback.");
+                return;
             }
-        });
-
-        // Load scores for the current user
-        function loadScores(username) {
-            const scores = JSON.parse(localStorage.getItem(`${username}-scores`) || "{}");
-            document.getElementById("score-gk").textContent = scores.generalKnowledge || 0;
-            document.getElementById("score-math").textContent = scores.mathematics || 0;
+            // Replace with your Google Form URL
+            const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSf...";
+            window.open(`${googleFormURL}?entry.1234567890=${encodeURIComponent(feedback)}`, "_blank");
+            alert("Thank you for your feedback!");
+            document.getElementById("feedback-input").value = "";
+            toggleFeedback(); // Hide feedback section after submission
         }
 
-        // Toggle game sections
-        function toggleGames(moduleId) {
-            const games = document.querySelectorAll('.games');
-            games.forEach(game => {
-                if (game.id === moduleId) {
-                    game.style.display = game.style.display === 'block' ? 'none' : 'block';
-                } else {
-                    game.style.display = 'none';
-                }
-            });
+        // Progress Tracker
+        function updateProgress() {
+            const scores = JSON.parse(localStorage.getItem(`${usernameInput.value.trim() || "Guest"}-scores`) || "{}");
+            const gkProgress = ((scores.generalKnowledge || 0) / 10) * 100;
+            const mathProgress = ((scores.mathematics || 0) / 10) * 100;
+            document.getElementById("progress-gk").textContent = `${gkProgress}%`;
+            document.getElementById("progress-math").textContent = `${mathProgress}%`;
         }
 
-        // Increment score for the current user
-        function incrementScore(scoreId) {
-            const username = localStorage.getItem("username") || "Guest";
-            const scores = JSON.parse(localStorage.getItem(`${username}-scores`) || "{}");
-
-            // Update the specific score
-            if (scoreId === "score-gk") {
-                scores.generalKnowledge = (scores.generalKnowledge || 0) + 1;
-            } else if (scoreId === "score-math") {
-                scores.mathematics = (scores.mathematics || 0) + 1;
+        // Clear All Data
+        function clearData() {
+            if (confirm("Are you sure you want to clear all data? This cannot be undone.")) {
+                localStorage.clear();
+                alert("All data has been cleared.");
+                window.location.reload();
             }
-
-            // Save updated scores to localStorage
-            localStorage.setItem(`${username}-scores`, JSON.stringify(scores));
-
-            // Update the displayed score
-            document.getElementById(scoreId).textContent = scores[scoreId.replace("score-", "")] || 0;
         }
 
-        // Load scores for the current user on page load
-        loadScores(storedUsername || "Guest");
+        // Update progress on page load
+        updateProgress();
     </script>
 </body>
-
-</html>

@@ -1,223 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fun Math Quiz for Kids</title>
-    <style>
-        body {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            background-color: #FFD54F;
-            color: #333;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .quiz-container {
-            background-color: #FFFFFF;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            text-align: center;
-        }
-        h1 { color: #FF5722; }
-        .difficulty {
-            font-size: 1em;
-            padding: 8px 15px;
-            border-radius: 10px;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-        .easy { background-color: #4CAF50; color: white; }
-        .medium { background-color: #FF9800; color: white; }
-        .hard { background-color: #F44336; color: white; }
-        label {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #E0F7FA;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-        label:hover { background-color: #B2EBF2; }
-        input[type="radio"] { display: none; }
-        input[type="radio"]:checked + label {
-            background-color: #4DD0E1;
-            color: white;
-        }
-        .buttons {
-            margin-top: 20px;
-        }
-        .buttons button {
-            background-color: #FF9800;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            margin: 10px;
-        }
-        .buttons button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-        select {
-            font-size: 16px;
-            padding: 8px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-        }
-    </style>
-</head>
-<body>
-    <div class="quiz-container">
-        <h1>Fun Math Quiz! 🎉</h1>
-        <label for="language">Select Language:</label>
-        <select id="language" onchange="restartQuiz()">
-            <option value="en">English</option>
-            <option value="hi">Hindi (हिन्दी)</option>
-            <option value="es">Spanish (Español)</option>
-            <option value="fr">French (Français)</option>
-        </select>
-        <p id="difficulty-display" class="difficulty">Loading...</p>
-        <div id="question-container">Loading questions...</div>
-        <div class="buttons" id="quiz-buttons" style="display: none;">
-            <button onclick="restartQuiz()">Play Again 🔄</button>
-            <button onclick="window.location.href='/'">Return to Dashboard 🏠</button>
-        </div>
-    </div>
-
-    <script>
-        const GEMINI_API_KEY = "AIzaSyBmIWZ5prsO4q912tcv1CmMu0I7UXBe2-c";
-        const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
-        const TRANSLATE_API_URL = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=";
-
-        let questionBank = [];
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let playerScore = parseInt(localStorage.getItem("score-math") || "0");
-        let selectedLanguage = localStorage.getItem("quiz-language") || "en";
-
-        document.getElementById("language").value = selectedLanguage;
-
-        function getDifficultyLevel(score) {
-            if (score <= 5) return { level: "Easy", topic: "Simple addition and subtraction", class: "easy" };
-            if (score <= 10) return { level: "Medium", topic: "Multiplication and division", class: "medium" };
-            return { level: "Hard", topic: "Word problems, fractions, and algebra", class: "hard" };
-        }
-
-        function checkAnswer(selectedAnswer) {
-    const questionData = questionBank[currentQuestionIndex];
-    const correctAnswerOriginal = questionData.answer; // Original correct answer in English
-
-    // Find the translated correct answer
-    const correctAnswerTranslated = questionData.options.find(option => option === correctAnswerOriginal);
-
-    if (!correctAnswerTranslated) {
-        console.error("❌ Translation mismatch. Unable to verify answer.");
-        return;
-    }
-
-    document.getElementById("feedback").textContent = 
-        selectedAnswer === correctAnswerTranslated
-            ? "✅ Correct! Well done!"
-            : `❌ Incorrect. The correct answer was: ${correctAnswerTranslated}`;
-
-    if (selectedAnswer === correctAnswerTranslated) {
-        score++;
-    }
-
-    currentQuestionIndex++;
-    setTimeout(showQuestion, 1000);
-}
-        async function fetchQuestions() {
-            let difficultyData = getDifficultyLevel(playerScore);
-            document.getElementById("difficulty-display").textContent = `Current Difficulty: ${difficultyData.level}`;
-            document.getElementById("difficulty-display").className = `difficulty ${difficultyData.class}`;
-
-            const requestBody = {
-                contents: [{ role: "user", parts: [{ text: `Generate 10 unique math questions for kids with four multiple-choice answers each. Difficulty level: ${difficultyData.topic}. Return JSON format: [{question: '', options: [], answer: ''}, ...].` }] }]
-            };
-
-            try {
-                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(requestBody),
-                });
-
-                if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
-                const data = await response.json();
-                let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
-                rawText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
-                questionBank = JSON.parse(rawText);
-
-                if (selectedLanguage !== "en") {
-                    await translateQuestions();
-                }
-
-                currentQuestionIndex = 0;
-                showQuestion();
-            } catch (error) {
-                console.error("❌ Error fetching questions:", error);
-                document.getElementById("question-container").innerHTML = "⚠️ Error loading questions. Please refresh!";
-            }
-        }
-
-        async function translateQuestions() {
-            for (let i = 0; i < questionBank.length; i++) {
-                questionBank[i].question = await translateText(questionBank[i].question);
-                for (let j = 0; j < questionBank[i].options.length; j++) {
-                    questionBank[i].options[j] = await translateText(questionBank[i].options[j]);
-                }
-                questionBank[i].answer = await translateText(questionBank[i].answer);
-            }
-        }
-
-        async function translateText(text) {
-            const response = await fetch(`${TRANSLATE_API_URL}${selectedLanguage}&dt=t&q=${encodeURIComponent(text)}`);
-            const data = await response.json();
-            return data[0][0][0];
-        }
-
-        function showQuestion() {
-            if (currentQuestionIndex >= questionBank.length) {
-                document.getElementById("question-container").innerHTML = `<h2>Quiz Completed! 🎉</h2><p>Your Score: ${score}/${questionBank.length}</p>`;
-                document.getElementById("quiz-buttons").style.display = "block";
-                return;
-            }
-            const questionData = questionBank[currentQuestionIndex];
-            document.getElementById("question-container").innerHTML = `
-                <div class="question">
-                    <h2>${questionData.question}</h2>
-                    ${questionData.options.map(option => `
-                        <div>
-                            <input type="radio" name="option" value="${option}" id="${option}">
-                            <label for="${option}" onclick="checkAnswer('${option}')">${option}</label>
-                        </div>
-                    `).join('')}
-                </div>
-                <p id="feedback"></p>
-            `;
-        }
-
-        function restartQuiz() {
-            selectedLanguage = document.getElementById("language").value;
-            localStorage.setItem("quiz-language", selectedLanguage);
-            fetchQuestions();
-        }
-
-        fetchQuestions();
-    </script>
-</body>
-</html> -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -360,6 +140,20 @@
             font-size: 1.2em;
             margin-top: 15px;
             font-weight: bold;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Score Display */
+        #score-display {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #FF5722;
         }
     </style>
 </head>
@@ -389,6 +183,7 @@
             <option value="fr">French (Français)</option>
         </select>
         <p id="difficulty-display" class="difficulty">Loading...</p>
+        <p id="score-display">Score: 0</p>
         <div id="question-container">Loading questions...</div>
         <div class="buttons" id="quiz-buttons" style="display: none;">
             <button onclick="restartQuiz()">Play Again 🔄</button>
@@ -397,8 +192,6 @@
     </div>
 
     <script>
-        // JavaScript remains the same as in the original code
-        
         const GEMINI_API_KEY = "AIzaSyBmIWZ5prsO4q912tcv1CmMu0I7UXBe2-c";
         const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
         const TRANSLATE_API_URL = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=";
@@ -418,29 +211,33 @@
         }
 
         function checkAnswer(selectedAnswer) {
-    const questionData = questionBank[currentQuestionIndex];
-    const correctAnswerOriginal = questionData.answer; // Original correct answer in English
+            const questionData = questionBank[currentQuestionIndex];
+            const correctAnswerOriginal = questionData.answer; // Original correct answer in English
 
-    // Find the translated correct answer
-    const correctAnswerTranslated = questionData.options.find(option => option === correctAnswerOriginal);
+            // Find the translated correct answer
+            const correctAnswerTranslated = questionData.options.find(option => option === correctAnswerOriginal);
 
-    if (!correctAnswerTranslated) {
-        console.error("❌ Translation mismatch. Unable to verify answer.");
-        return;
-    }
+            if (!correctAnswerTranslated) {
+                console.error("❌ Translation mismatch. Unable to verify answer.");
+                return;
+            }
 
-    document.getElementById("feedback").textContent = 
-        selectedAnswer === correctAnswerTranslated
-            ? "✅ Correct! Well done!"
-            : `❌ Incorrect. The correct answer was: ${correctAnswerTranslated}`;
+            document.getElementById("feedback").textContent =
+                selectedAnswer === correctAnswerTranslated
+                    ? "✅ Correct! Well done!"
+                    : `❌ Incorrect. The correct answer was: ${correctAnswerTranslated}`;
 
-    if (selectedAnswer === correctAnswerTranslated) {
-        score++;
-    }
+            if (selectedAnswer === correctAnswerTranslated) {
+                score++;
+                playerScore++;
+                localStorage.setItem("score-math", playerScore);
+            }
 
-    currentQuestionIndex++;
-    setTimeout(showQuestion, 1000);
-}
+            document.getElementById("score-display").textContent = `Score: ${playerScore}`;
+            currentQuestionIndex++;
+            setTimeout(showQuestion, 1000);
+        }
+
         async function fetchQuestions() {
             let difficultyData = getDifficultyLevel(playerScore);
             document.getElementById("difficulty-display").textContent = `Current Difficulty: ${difficultyData.level}`;
