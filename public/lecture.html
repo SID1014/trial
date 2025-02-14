@@ -38,29 +38,50 @@
             height: 315px;
             border-radius: 10px;
         }
+        .download-section {
+            margin-top: 20px;
+        }
+        .download-section a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #ff9a9e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .download-section a:hover {
+            background-color: #fad0c4;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>📚 Educational Lectures for Kids 🎥</h1>
-        
+
         <div class="section">
             <h2>🚀 Solar System Quiz - Learning Video</h2>
             <p>Learn all about the planets and the solar system!</p>
             <iframe src="https://www.youtube.com/embed/e8YzKyot4Pc?si=kgcsmLFFdHarRXp_" id="solarVideo" allowfullscreen></iframe>
         </div>
-        
+
         <div class="section">
             <h2>🔠 Alphabet Sorting - Learning Video</h2>
             <p>Understand vowels and consonants in a fun way!</p>
             <iframe src="https://www.youtube.com/embed/J-kLTQPNnPc?si=uPTu25CCq0nvmC-9" id="alphabetVideo" allowfullscreen></iframe>
         </div>
+
+        <div class="section download-section">
+            <h2>📥 Download Lecture</h2>
+            <p>Download an existing video:</p>
+            <a href="https://drive.google.com/uc?export=download&id=1NtffTJnm3cMOGsywpINnlVn_JhJK1DKz" download="video.mp4">Download Video</a>
+
+        </div>
+        
+        
+
     </div>
-    
-    <script>
-        // Add YouTube embed links here
-        document.getElementById("solarVideo").src = "https://www.youtube.com/embed/YOUR_VIDEO_ID_HERE";
-        document.getElementById("alphabetVideo").src = "https://www.youtube.com/embed/YOUR_VIDEO_ID_HERE";
-    </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Local Login/Signup</title>
+  <title>Kids Login/Signup</title>
   <style>
     /* Basic Reset & box-sizing */
     * {
@@ -12,69 +12,256 @@
       padding: 0;
     }
     body {
-      background-color: orange; /* Orange background */
-      color: white;            /* White text */
+      background: linear-gradient(135deg, #a8e6cf, #dcedc1); /* Soft gradient background */
+      color: #333;           /* Dark text for contrast */
       font-family: "Comic Sans MS", cursive, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      overflow: hidden;
+      position: relative;
     }
+
+    /* Background Animation */
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #ffffff;
+      border-radius: 50%;
+      animation: twinkle 3s infinite ease-in-out;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* Glowing effect */
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    /* Moon */
+    .moon {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: #f0f0f0;
+      border-radius: 50%;
+      box-shadow: 0 0 50px rgba(255, 255, 255, 0.8);
+      top: 10%;
+      left: 10%;
+      z-index: -1;
+      animation: float 6s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* Clouds */
+    .cloud {
+      position: absolute;
+      background: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+      z-index: -1;
+    }
+
+    .cloud-1 {
+      width: 120px;
+      height: 60px;
+      top: 20%;
+      left: 70%;
+      animation: float 10s infinite ease-in-out;
+    }
+
+    .cloud-2 {
+      width: 150px;
+      height: 75px;
+      top: 40%;
+      left: 20%;
+      animation: float 12s infinite ease-in-out;
+    }
+
+    /* Balloons */
+    .balloon {
+      position: absolute;
+      width: 80px;
+      height: 100px;
+      background: #ff8b94; /* Soft pink */
+      border-radius: 50%;
+      animation: float 8s infinite ease-in-out;
+      z-index: -1;
+    }
+
+    .balloon::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      width: 2px;
+      height: 50px;
+      background: #333;
+    }
+
+    .balloon-1 {
+      top: 5%;
+      left: 5%;
+      background: #ff8b94; /* Soft pink */
+      animation-delay: 0s;
+    }
+
+    .balloon-2 {
+      top: 15%;
+      left: 80%;
+      background: #a8e6cf; /* Soft green */
+      animation-delay: 2s;
+    }
+
+    .balloon-3 {
+      top: 30%;
+      left: 60%;
+      background: #dcedc1; /* Soft yellow */
+      animation-delay: 4s;
+    }
+
+    /* Container */
     .container {
-      background-color: #333;  /* Solid dark background (no opacity) */
-      padding: 20px;
-      border-radius: 8px;
-      width: 320px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Add a subtle shadow if you like */
-    }
-    h2 {
+      background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+      padding: 30px;
+      border-radius: 15px;
+      width: 400px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
       text-align: center;
-      margin-bottom: 20px;
+      border: 2px solid #ff8b94; /* Soft pink border */
+      animation: popIn 0.5s ease-in-out;
     }
+
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    h2 {
+      color: #ff8b94;          /* Soft pink heading */
+      margin-bottom: 25px;
+      font-size: 2em;
+      text-shadow: 0 0 10px rgba(255, 139, 148, 0.5); /* Glowing text */
+    }
+
+    /* Input Fields */
+    input[type="text"],
     input[type="email"],
     input[type="password"] {
-      display: block;        
-      width: 90%;            
-      margin: 8px auto;      
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
+      display: block;
+      width: 100%;
+      margin: 15px 0;          /* Increased spacing */
+      padding: 12px;
+      border: 2px solid #ff8b94; /* Soft pink border */
+      border-radius: 8px;
       font-size: 1em;
-      background-color: #fff; 
-      color: #000;            
+      background-color: #fff3e0;
+      color: #333;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      border-color: #a8e6cf; /* Soft green on focus */
+      outline: none;
+      box-shadow: 0 0 10px rgba(168, 230, 207, 0.5); /* Glowing effect on focus */
+    }
+
+    /* Buttons */
     button {
       display: block;
       width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      background-color: #444;
-      color: white;
+      padding: 12px;
+      margin-top: 20px;        /* Increased spacing */
+      background: linear-gradient(145deg, #ff8b94, #a8e6cf); /* Gradient button */
+      color: #ffffff;
       border: none;
-      border-radius: 4px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 1em;
+      font-size: 1.1em;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
+
     button:hover {
-      background-color: #555;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255, 139, 148, 0.8); /* Glowing effect on hover */
     }
+
+    /* Toggle Link */
     .toggle-link {
       display: block;
       text-align: center;
-      margin-top: 10px;
+      margin-top: 20px;       /* Increased spacing */
       cursor: pointer;
       text-decoration: underline;
-      color: #ddd;
+      color: #ff8b94; /* Soft pink */
+      font-size: 0.9em;
+      transition: color 0.3s;
     }
+
+    .toggle-link:hover {
+      color: #a8e6cf; /* Soft green on hover */
+      text-shadow: 0 0 10px rgba(168, 230, 207, 0.5); /* Glowing effect on hover */
+    }
+
+    /* Error Messages */
     .error {
-      color: #ffaaaa;
+      color: #ff4444;
       font-size: 0.9em;
       text-align: center;
-      margin-top: 10px;
+      margin-top: 15px;       /* Increased spacing */
+      text-shadow: 0 0 10px rgba(255, 68, 68, 0.5); /* Glowing effect */
     }
   </style>
 </head>
 <body>
+  <!-- Background Animation -->
+  <div class="background">
+    <!-- Moon -->
+    <div class="moon"></div>
+
+    <!-- Clouds -->
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+
+    <!-- Balloons -->
+    <div class="balloon balloon-1"></div>
+    <div class="balloon balloon-2"></div>
+    <div class="balloon balloon-3"></div>
+
+    <!-- Dynamically generated stars -->
+    <script>
+      // Generate random stars
+      const starCount = 50; // Reduced number of stars for daytime effect
+      const background = document.querySelector('.background');
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        star.style.top = `${Math.random() * 100}%`;
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.animationDelay = `${Math.random() * 3}s`; // Random delay for twinkling
+        background.appendChild(star);
+      }
+    </script>
+  </div>
+
+  <!-- Container -->
   <div class="container">
     <!-- Login Form -->
     <div id="loginDiv">
@@ -92,6 +279,7 @@
     <div id="signupDiv" style="display:none;">
       <h2>Sign Up</h2>
       <form id="signupForm">
+        <input type="text" id="signupUsername" placeholder="Username" required />
         <input type="email" id="signupEmail" placeholder="Email" required />
         <input type="password" id="signupPassword" placeholder="Password" required />
         <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required />
@@ -103,9 +291,6 @@
   </div>
 
   <script>
-    // Redirect if already logged in
-
-
     const loginDiv = document.getElementById('loginDiv');
     const signupDiv = document.getElementById('signupDiv');
     const showSignup = document.getElementById('showSignup');
@@ -165,10 +350,15 @@
       e.preventDefault();
       signupError.textContent = "";
 
+      const username = document.getElementById('signupUsername').value.trim();
       const email = document.getElementById('signupEmail').value.trim();
       const password = document.getElementById('signupPassword').value;
       const confirmPassword = document.getElementById('signupConfirmPassword').value;
 
+      if (!username) {
+        signupError.textContent = "Username is required.";
+        return;
+      }
       if (!isValidEmail(email)) {
         signupError.textContent = "Invalid email format.";
         return;
@@ -190,7 +380,7 @@
       }
 
       const hashedPassword = await hashPassword(password);
-      users.push({ email: email, password: hashedPassword });
+      users.push({ username: username, email: email, password: hashedPassword });
       saveUsers(users);
 
       // Auto-login after signup

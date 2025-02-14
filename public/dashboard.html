@@ -9,11 +9,36 @@
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif;
             text-align: center;
-            background: url("bg_img1.jpg") no-repeat center center fixed;
-            background-size: cover;
+            background: #87CEEB; /* Light sky blue background */
             color: white;
             margin: 0;
             padding: 0;
+            overflow: hidden;
+        }
+
+        .username {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff8c00, #ff0080);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 10px;
+            border-radius: 5px;
+            text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.8);
+        }
+
+        #usernameInput {
+            font-size: 18px;
+            border: none;
+            background: transparent;
+            color: white;
+            font-weight: bold;
+            text-align: left;
+            width: 120px;
+            outline: none;
         }
 
         .container {
@@ -25,22 +50,14 @@
         }
 
         h1 {
-            font-size: 60px; /* Increased font size */
-            text-shadow: 3px 3px 8px rgba(255, 255, 0, 0.8);
+            font-size: 60px;
             font-weight: bold;
             background: linear-gradient(90deg, #ff8c00, #ff0080);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: glow 1.5s infinite alternate;
-        }
-
-        @keyframes glow {
-            from {
-                text-shadow: 3px 3px 8px rgba(255, 255, 0, 0.8);
-            }
-            to {
-                text-shadow: 5px 5px 12px rgba(255, 105, 180, 0.9);
-            }
+            margin: 0;
+            padding: 20px;
+            border-radius: 15px;
         }
 
         .modules {
@@ -50,58 +67,199 @@
             margin-top: 30px;
         }
 
-        .module-card,
-        .game-card {
-            background: white;
-            color: black;
+        .module-card {
             padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             text-decoration: none;
             font-size: 20px;
             font-weight: bold;
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
             position: relative;
+            text-align: center;
+            width: 220px;
         }
 
-        .module-card {
-            background: yellow;
+        .module-card:nth-child(1) {
+            background: linear-gradient(45deg, #32CD32, #228B22);
+            color: white;
+            box-shadow: 0px 4px 10px rgba(50, 205, 50, 0.5);
+            border: 2px solid white;
+            text-transform: uppercase;
+            animation: glowGreen 1.5s infinite alternate;
         }
 
-        .module-card:hover,
-        .game-card:hover {
-            transform: scale(1.1);
+        @keyframes glowGreen {
+            from {
+                box-shadow: 0px 0px 10px rgba(50, 205, 50, 0.7);
+            }
+            to {
+                box-shadow: 0px 0px 20px rgba(50, 255, 50, 1);
+            }
+        }
+
+        .module-card:nth-child(2) {
+            background: linear-gradient(45deg, #1E90FF, #00008B);
+            color: white;
+            box-shadow: 0px 4px 10px rgba(30, 144, 255, 0.5);
+            border: 3px solid white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card:nth-child(2)::before {
+            content: "";
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            width: 100%;
+            height: 100%;
+            border: 3px solid cyan;
+            animation: rotateBorder 2s linear infinite;
+        }
+
+        @keyframes rotateBorder {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .module-card:nth-child(3) {
+            background: linear-gradient(45deg, #FF4500, #B22222);
+            color: white;
+            box-shadow: 0px 4px 10px rgba(255, 69, 0, 0.5);
+            border: 2px solid white;
+            font-style: italic;
+            animation: bounceRed 1.5s infinite alternate;
+        }
+
+        @keyframes bounceRed {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        /* Updated Animation for General Knowledge */
+        .module-card:nth-child(1) span {
+            display: inline-block;
+            animation: wave 1.5s infinite ease-in-out;
+        }
+
+        @keyframes wave {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px) rotate(-5deg);
+            }
+            100% {
+                transform: translateY(0);
+            }
         }
 
         .games {
             display: none;
-            flex-direction: column;
-            gap: 15px;
             margin-top: 20px;
         }
 
-        .score-module {
-            margin-top: 10px;
-            font-size: 18px;
+        .game-card {
+            display: block;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
             color: white;
+            text-decoration: none;
+            font-size: 24px;
+            transition: background 0.3s, transform 0.3s;
+            animation: float 3s infinite ease-in-out;
+        }
+
+        .game-card:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+            animation: wiggle 0.5s ease-in-out;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            50% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        .score-module {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes flip {
+            0% { transform: rotateX(0deg); }
+            50% { transform: rotateX(90deg); }
+            100% { transform: rotateX(0deg); }
+        }
+
+        .score-module span {
+            display: inline-block;
+            animation: flip 0.5s ease-in-out;
         }
     </style>
 </head>
 
 <body>
+    <div class="username">User: <input type="text" id="usernameInput" placeholder="Enter your name"></div>
     <div class="container">
         <h1>Welcome to the Kids Educational Game Page</h1>
         <div class="modules">
-            <div class="module-card" onclick="toggleGames('general-knowledge')">🌍 General Knowledge</div>
-            <div class="module-card" onclick="toggleGames('mathematics')">➗ Mathematics</div>
-            <div class="module-card" onclick="toggleGames('lectures')">📚 Lectures</div>
+            <div class="module-card" onclick="toggleGames('general-knowledge')">
+                <span style="font-size: 35px;">🏆</span> <span>General Knowledge</span>
+            </div>
+            <div class="module-card" onclick="toggleGames('mathematics')">
+                <span style="font-size: 35px;">➗</span> Mathematics
+            </div>
+            <div class="module-card" onclick="toggleGames('lectures')">
+                <span style="font-size: 35px;">📚</span> <span>Lectures</span>
+            </div>
         </div>
 
         <div id="general-knowledge" class="games">
             <a href="./solar_quiz.html" class="game-card" onclick="incrementScore('score-gk')">🚀 Solar System Quiz</a>
-            <a href="./alphabet_game.html" class="game-card" onclick="incrementScore('score-gk')">🔠 Alphabet
-                Sorting</a>
+            <a href="./alphabet_game.html" class="game-card" onclick="incrementScore('score-gk')">🔠 Alphabet Sorting</a>
             <div class="score-module">🌍 General Knowledge Score: <span id="score-gk">0</span></div>
         </div>
 
@@ -116,22 +274,43 @@
     </div>
 
     <script>
+        // Fetch username from localStorage or set to "Guest"
+        const usernameInput = document.getElementById("usernameInput");
+        const storedUsername = localStorage.getItem("username");
+        usernameInput.value = storedUsername || "Guest";
+
+        // Save username to localStorage when input changes
+        usernameInput.addEventListener("input", () => {
+            localStorage.setItem("username", usernameInput.value);
+        });
+
+        // Prevent form submission on Enter key
+        usernameInput.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                this.blur(); // Removes focus from input after entering name
+            }
+        });
+
+        // Toggle game sections
         function toggleGames(moduleId) {
-            document.querySelectorAll('.games').forEach(gameSection => {
-                gameSection.style.display = 'none';
+            const games = document.querySelectorAll('.games');
+            games.forEach(game => {
+                if (game.id === moduleId) {
+                    game.style.display = game.style.display === 'block' ? 'none' : 'block';
+                } else {
+                    game.style.display = 'none';
+                }
             });
-            document.getElementById(moduleId).style.display = 'flex';
         }
 
+        // Increment score
         function incrementScore(scoreId) {
-            let score = localStorage.getItem(scoreId) || 0;
-            score = parseInt(score) + 1;
-            localStorage.setItem(scoreId, score);
-            document.getElementById(scoreId).textContent = score;
+            const scoreElement = document.getElementById(scoreId);
+            let score = parseInt(scoreElement.textContent);
+            score += 1;
+            scoreElement.textContent = score;
         }
-
-        document.getElementById("score-gk").textContent = localStorage.getItem("score-gk") || 0;
-        document.getElementById("score-math").textContent = localStorage.getItem("score-math") || 0;
     </script>
 </body>
 
