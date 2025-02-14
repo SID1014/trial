@@ -6,72 +6,129 @@
     <title>Alphabet Sorting Game</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
+            background-color: #ffcccb;
         }
         .container {
             max-width: 600px;
             margin: 50px auto;
             background: white;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #ff5733;
         }
         .letters {
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
             margin: 20px 0;
         }
         .letter {
             font-size: 24px;
-            padding: 10px;
-            margin: 5px;
+            padding: 15px;
+            margin: 10px;
             background-color: #007BFF;
             color: white;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: grab;
+            display: inline-block;
         }
         .drop-zone {
-            min-height: 50px;
-            padding: 10px;
-            margin: 10px;
-            border: 2px dashed #333;
-            background-color: #e9ecef;
+            min-height: 80px;
+            padding: 20px;
+            margin: 20px;
+            border: 3px dashed #333;
+            background-color: #ffff99;
+            font-size: 18px;
+            font-weight: bold;
         }
         .drop-zone.correct {
             background-color: #28a745;
+            color: white;
+        }
+        .dropped-letters {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+        }
+        #message {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .buttons .play-again {
+            background-color: #007BFF;
+            color: white;
+        }
+        .buttons .dashboard {
+            background-color: #ff5733;
             color: white;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Alphabet Sorting Game</h1>
+        <h1>Alphabet Sorting Game 🎉</h1>
         <p>Drag the letters to the correct category.</p>
         <div class="letters" id="letters"></div>
         <div class="drop-zones">
-            <div class="drop-zone" id="vowels">Drop Vowels Here</div>
-            <div class="drop-zone" id="consonants">Drop Consonants Here</div>
+            <div class="drop-zone" id="vowels">Drop Vowels Here
+                <div class="dropped-letters" id="vowel-letters"></div>
+            </div>
+            <div class="drop-zone" id="consonants">Drop Consonants Here
+                <div class="dropped-letters" id="consonant-letters"></div>
+            </div>
         </div>
         <p id="message"></p>
+        <div class="buttons">
+            <button class="play-again" onclick="generateLetters()">Play Again</button>
+            <button class="dashboard" onclick="window.location.href='/'">Back to Dashboard</button>
+        </div>  
     </div>
     <script>
-        const letters = ['A', 'E', 'I', 'O', 'U', 'B', 'C', 'D', 'F', 'G'];
         const vowels = ['A', 'E', 'I', 'O', 'U'];
-        let score = 0;
+        const allLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
-        const letterContainer = document.getElementById("letters");
-        letters.forEach(letter => {
-            const div = document.createElement("div");
-            div.textContent = letter;
-            div.classList.add("letter");
-            div.draggable = true;
-            div.addEventListener("dragstart", (event) => {
-                event.dataTransfer.setData("text", letter);
+        function generateLetters() {
+            const letterContainer = document.getElementById("letters");
+            letterContainer.innerHTML = "";
+            let selectedLetters = [];
+            while (selectedLetters.length < 10) {
+                let randomLetter = allLetters[Math.floor(Math.random() * allLetters.length)];
+                if (!selectedLetters.includes(randomLetter)) {
+                    selectedLetters.push(randomLetter);
+                }
+            }
+            selectedLetters.forEach(letter => {
+                const div = document.createElement("div");
+                div.textContent = letter;
+                div.classList.add("letter");
+                div.draggable = true;
+                div.addEventListener("dragstart", (event) => {
+                    event.dataTransfer.setData("text", letter);
+                });
+                letterContainer.appendChild(div);
             });
-            letterContainer.appendChild(div);
-        });
+            document.getElementById("vowel-letters").textContent = "";
+            document.getElementById("consonant-letters").textContent = "";
+        }
 
         document.querySelectorAll(".drop-zone").forEach(zone => {
             zone.addEventListener("dragover", (event) => {
@@ -82,15 +139,18 @@
                 const letter = event.dataTransfer.getData("text");
                 if ((zone.id === "vowels" && vowels.includes(letter)) || (zone.id === "consonants" && !vowels.includes(letter))) {
                     zone.classList.add("correct");
-                    score++;
-                    document.getElementById("message").textContent = "Correct!";
+                    document.getElementById("message").textContent = "Correct! 🎉";
                     setTimeout(() => { document.getElementById("message").textContent = ""; }, 1000);
+                    const droppedContainer = zone.id === "vowels" ? document.getElementById("vowel-letters") : document.getElementById("consonant-letters");
+                    droppedContainer.textContent += letter + " ";
                 }
                 let overallScore = localStorage.getItem("overallScore") || 0;
                 overallScore = parseInt(overallScore) + 1;
                 localStorage.setItem("overallScore", overallScore);
             });
         });
+
+        generateLetters();
     </script>
 </body>
 </html>

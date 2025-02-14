@@ -6,87 +6,104 @@
     <title>Solar System Quiz</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
+            background: url('https://source.unsplash.com/1600x900/?space,galaxy') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            background-color: black;
         }
         .container {
             max-width: 600px;
             margin: 50px auto;
-            background: white;
+            background: rgba(0, 0, 0, 0.8);
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            border: 2px solid aqua;
+
+        }
+        h1 {
+            color: #ffcc00;
         }
         .question {
-            font-size: 18px;
-            margin-bottom: 15px;
+            font-size: 20px;
+            margin: 20px 0;
         }
-        .option {
-            display: block;
-            background-color: #007BFF;
+        button {
+            background: #007BFF;
             color: white;
             padding: 10px;
-            margin: 5px;
+            margin: 10px;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
+            font-size: 16px;
         }
-        .option:hover {
-            background-color: #0056b3;
+        .options button:hover {
+            background: #0056b3;
         }
         #result {
+            font-size: 22px;
             margin-top: 20px;
-            font-size: 20px;
             font-weight: bold;
         }
     </style>
 </head>
-<body>
+<body  bgcolor="Black">
     <div class="container">
-        <h1>Solar System Quiz</h1>
-        <div id="quiz-container">
-            <p class="question" id="question">Loading question...</p>
-            <div id="options"></div>
-            <p id="result"></p>
+        <h1>Solar System Quiz 🌍🌟</h1>
+        <p class="question" id="question">Loading question...</p>
+        <div class="options" id="options"></div>
+        <p id="result"></p>
+        <div>
+            <button class="play-again" onclick="'/'">Play Again</button>
+            <button class="dashboard" onclick="window.location.href='/'">Back to Dashboard</button>
         </div>
     </div>
     <script>
         const quizData = [
             { question: "What is the largest planet in our solar system?", options: ["Earth", "Jupiter", "Mars", "Venus"], answer: "Jupiter" },
-            { question: "Which planet is known as the Red Planet?", options: ["Mercury", "Mars", "Saturn", "Neptune"], answer: "Mars" },
-            { question: "How many planets are in the solar system?", options: ["7", "8", "9", "10"], answer: "8" }
+            { question: "Which planet is known as the Red Planet?", options: ["Mars", "Saturn", "Neptune", "Mercury"], answer: "Mars" },
+            { question: "What celestial body is at the center of our solar system?", options: ["Moon", "Earth", "Sun", "Pluto"], answer: "Sun" },
         ];
-        let currentQuestion = 0;
-        let score = 0;
+        
+        let currentQuestionIndex = 0;
+        const questionElement = document.getElementById("question");
+        const optionsElement = document.getElementById("options");
+        const resultElement = document.getElementById("result");
+        
         function loadQuestion() {
-            const questionData = quizData[currentQuestion];
-            document.getElementById("question").textContent = questionData.question;
-            const optionsContainer = document.getElementById("options");
-            optionsContainer.innerHTML = "";
-            questionData.options.forEach(option => {
+            const currentQuestion = quizData[currentQuestionIndex];
+            questionElement.textContent = currentQuestion.question;
+            optionsElement.innerHTML = "";
+            currentQuestion.options.forEach(option => {
                 const button = document.createElement("button");
                 button.textContent = option;
-                button.className = "option";
                 button.onclick = () => checkAnswer(option);
-                optionsContainer.appendChild(button);
+                optionsElement.appendChild(button);
             });
         }
-        function checkAnswer(selected) {
-            const correct = quizData[currentQuestion].answer;
-            if (selected === correct) {
-                score++;
-            }
-            currentQuestion++;
-            if (currentQuestion < quizData.length) {
-                loadQuestion();
-            } else {
-                document.getElementById("quiz-container").innerHTML = `<h2>Quiz Completed!</h2><p>Your score: ${score}/${quizData.length}</p>`;
+        
+        function checkAnswer(selectedOption) {
+            const correctAnswer = quizData[currentQuestionIndex].answer;
+            if (selectedOption === correctAnswer) {
+                resultElement.textContent = "Correct! 🎉";
+                resultElement.style.color = "#28a745";
                 let overallScore = localStorage.getItem("overallScore") || 0;
-                overallScore = parseInt(overallScore) + score;
+                overallScore = parseInt(overallScore) + 1;
                 localStorage.setItem("overallScore", overallScore);
+            } else {
+                resultElement.textContent = "Wrong! Try again. ❌";
+                resultElement.style.color = "#dc3545";
             }
+            setTimeout(() => {
+                resultElement.textContent = "";
+                currentQuestionIndex = (currentQuestionIndex + 1) % quizData.length;
+                loadQuestion();
+            }, 2000);
         }
+        
         loadQuestion();
     </script>
 </body>
