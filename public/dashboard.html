@@ -1,895 +1,660 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Dashboard</title>
-    <style>
-        /* General Styles */
-        body {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            text-align: center;
-            color: white;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            position: relative;
-            background: linear-gradient(-45deg, #fc7e5f, #fba665, #ee6f6f, #e5b355);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-        }
-
-        @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        /* Particle Animation */
-        .particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .particles span {
-            position: absolute;
-            display: block;
-            width: 10px;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            animation: float 5s infinite ease-in-out;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(0) rotate(0deg);
-            }
-            50% {
-                transform: translateY(-20px) rotate(180deg);
-            }
-            100% {
-                transform: translateY(0) rotate(360deg);
-            }
-        }
-
-        .particles span:nth-child(1) {
-            top: 10%;
-            left: 20%;
-            animation-duration: 8s;
-        }
-
-        .particles span:nth-child(2) {
-            top: 30%;
-            left: 50%;
-            animation-duration: 12s;
-        }
-
-        .particles span:nth-child(3) {
-            top: 50%;
-            left: 70%;
-            animation-duration: 10s;
-        }
-
-        .particles span:nth-child(4) {
-            top: 70%;
-            left: 10%;
-            animation-duration: 9s;
-        }
-
-        .particles span:nth-child(5) {
-            top: 90%;
-            left: 40%;
-            animation-duration: 11s;
-        }
-
-        /* Animated Cartoon Characters */
-        .animated-cartoons {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .animated-cartoons span {
-            position: absolute;
-            display: block;
-            font-size: 50px;
-            animation: float 10s infinite ease-in-out;
-        }
-
-        .animated-cartoons span:nth-child(1) {
-            top: 20%;
-            left: 10%;
-            animation-duration: 8s;
-        }
-
-        .animated-cartoons span:nth-child(2) {
-            top: 40%;
-            left: 60%;
-            animation-duration: 12s;
-        }
-
-        .animated-cartoons span:nth-child(3) {
-            top: 60%;
-            left: 30%;
-            animation-duration: 10s;
-        }
-
-        .animated-cartoons span:nth-child(4) {
-            top: 80%;
-            left: 70%;
-            animation-duration: 9s;
-        }
-
-        .animated-cartoons span:nth-child(5) {
-            top: 10%;
-            left: 80%;
-            animation-duration: 11s;
-        }
-
-        /* Username Input */
-        .username {
-            position: absolute;
-            top: 10px;
-            left: 20px;
-            font-size: 22px;
-            font-weight: bold;
-            background: linear-gradient(90deg, #8c0f03, #604d01);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            padding: 10px;
-            border-radius: 5px;
-            text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.8);
-        }
-
-        #usernameInput {
-            font-size: 18px;
-            border: none;
-            background: transparent;
-            color: white;
-            font-weight: bold;
-            text-align: left;
-            width: 120px;
-            outline: none;
-        }
-
-        /* Main Container */
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            position: relative;
-            z-index: 1;
-        }
-
-        h1 {
-            font-size: 60px;
-            font-weight: bold;
-            background: linear-gradient(90deg, #6208bc, #0be3e0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0;
-            padding: 20px;
-            border-radius: 15px;
-        }
-
-        /* Module Cards */
-        .modules {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .module-card {
-            padding: 20px;
-            border-radius: 15px;
-            text-decoration: none;
-            font-size: 20px;
-            font-weight: bold;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-            position: relative;
-            text-align: center;
-            width: 220px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-        }
-
-        .module-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
-        }
-
-        .module-card:nth-child(1) {
-            background: linear-gradient(45deg, #ff619b, #9500ff);
-            animation: glowOrange 1.5s infinite alternate;
-        }
-
-        @keyframes glowOrange {
-            from {
-                box-shadow: 0px 0px 10px rgba(245, 81, 66, 0.7);
-            }
-            to {
-                box-shadow: 0px 0px 20px rgb(180, 145, 3);
-            }
-        }
-
-        .module-card:nth-child(2) {
-            background: linear-gradient(45deg, #6a11cb, #2575fc);
-        }
-
-        .module-card:nth-child(3) {
-            background: linear-gradient(45deg, #f86469, #f35bc7);
-        }
-
-        /* Games Section */
-        .games {
-            display: none;
-            margin-top: 20px;
-        }
-
-        .game-card {
-            display: block;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            text-decoration: none;
-            font-size: 24px;
-            transition: background 0.3s, transform 0.3s;
-            animation: float 3s infinite ease-in-out;
-        }
-
-        .game-card:hover {
-            background: rgba(255, 255, 255, 0.4);
-            transform: scale(1.05);
-            animation: wiggle 0.5s ease-in-out;
-        }
-
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(5deg); }
-            50% { transform: rotate(-5deg); }
-            75% { transform: rotate(5deg); }
-        }
-
-        /* Score Module */
-        .score-module {
-            margin-top: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-    </style>
-</head>
-
-<body>
- 
-    <div class="particles">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-
-    <div class="animated-cartoons">
-        <span>🐱</span>
-        <span>🐶</span>
-        <span>🦄</span>
-        <span>🐧</span>
-        <span>🐘</span>
-    </div>
-
-   
-    <div class="username">User: <input type="text" id="usernameInput" placeholder="Enter your name"></div>
-    <div class="container">
-        <h1>Welcome to the Kids Educational Game Page</h1>
-        <div class="modules">
-            <div class="module-card" onclick="toggleGames('general-knowledge')">
-                <span style="font-size: 35px;">🏆</span> <span>General Knowledge</span>
-            </div>
-            <div class="module-card" onclick="toggleGames('mathematics')">
-                <span style="font-size: 35px;">➗</span> Mathematics
-            </div>
-            <div class="module-card" onclick="toggleGames('lectures')">
-                <span style="font-size: 35px;">📚</span> <span>Lectures</span>
-            </div>
-        </div>
-
-        <div id="general-knowledge" class="games">
-            <a href="./solar_quiz.html" class="game-card" onclick="incrementScore('score-gk')">🚀 Solar System Quiz</a>
-            <a href="./alphabet_game.html" class="game-card" onclick="incrementScore('score-gk')">🔠 Alphabet Sorting</a>
-            <div class="score-module">🌍 General Knowledge Score: <span id="score-gk">0</span></div>
-        </div>
-
-        <div id="mathematics" class="games">
-            <a href="./math-quiz.html" class="game-card" onclick="incrementScore('score-math')">🧮 Maths Quiz</a>
-            <a href="./shape-matching.html" class="game-card" onclick="incrementScore('score-math')"> Quiz</a>
-            <div class="score-module">➗ Mathematics Score: <span id="score-math">0</span></div>
-        </div>
-
-        <div id="lectures" class="games">
-            <a href="./lecture.html" class="game-card">📖 Educational Lectures</a>
-        </div>
-    </div>
-
-    <script>
-        // Your existing JavaScript code
-        const usernameInput = document.getElementById("usernameInput");
-        const storedUsername = localStorage.getItem("username");
-        usernameInput.value = storedUsername || "Guest";
-
-        usernameInput.addEventListener("input", () => {
-            const username = usernameInput.value.trim() || "Guest";
-            localStorage.setItem("username", username);
-            loadScores(username);
-        });
-
-        usernameInput.addEventListener("keypress", function (event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                this.blur();
-            }
-        });
-
-        function loadScores(username) {
-            const scores = JSON.parse(localStorage.getItem(`${username}-scores`) || "{}");
-            document.getElementById("score-gk").textContent = scores.generalKnowledge || 0;
-            document.getElementById("score-math").textContent = scores.mathematics || 0;
-        }
-
-        function toggleGames(moduleId) {
-            const games = document.querySelectorAll('.games');
-            games.forEach(game => {
-                if (game.id === moduleId) {
-                    game.style.display = game.style.display === 'block' ? 'none' : 'block';
-                } else {
-                    game.style.display = 'none';
-                }
-            });
-        }
-
-        function incrementScore(scoreId) {
-            const username = localStorage.getItem("username") || "Guest";
-            const scores = JSON.parse(localStorage.getItem(`${username}-scores`) || "{}");
-
-            if (scoreId === "score-gk") {
-                scores.generalKnowledge = (scores.generalKnowledge || 0) + 1;
-            } else if (scoreId === "score-math") {
-                scores.mathematics = (scores.mathematics || 0) + 1;
-            }
-
-            localStorage.setItem(`${username}-scores`, JSON.stringify(scores));
-            document.getElementById(scoreId).textContent = scores[scoreId.replace("score-", "")] || 0;
-        }
-
-        loadScores(storedUsername || "Guest");
-    </script>
-</body>
-
-</html> -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Dashboard</title>
+    <title>Enhanced Educational Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* General Styles */
-        body {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            text-align: center;
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            position: relative;
-            background: var(--background-gradient);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-        }
-
         :root {
-            --background-gradient: linear-gradient(-45deg, #fc7e5f, #fba665, #ee6f6f, #e5b355);
-            --text-color: white;
-            --card-bg: rgba(255, 255, 255, 0.1);
-            --card-border: rgba(255, 255, 255, 0.2);
-            --card-hover-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
-        }
+    --background-gradient: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+    --text-color: #2d3748;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --card-border: rgba(0, 0, 0, 0.1);
+    --card-hover-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    --accent-color: #4c51bf;
+    --success-color: #48bb78;
+}
 
-        body.dark-mode {
-            --background-gradient: linear-gradient(-45deg, #1a1a1a, #2c3e50, #34495e, #2c3e50);
-            --text-color: #ffffff;
-            --card-bg: rgba(0, 0, 0, 0.3);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --card-hover-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-        }
+body.dark-mode {
+    --background-gradient: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    --text-color: #e2e8f0;
+    --card-bg: rgba(26, 32, 44, 0.95);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --card-hover-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    --accent-color: #7f9cf5;
+}
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        /* Particle Animation */
-        .particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    background: var(--background-gradient);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    overflow-x: hidden;
+}
 
-        .particles span {
-            position: absolute;
-            display: block;
-            width: 10px;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            animation: float 5s infinite ease-in-out;
-        }
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
 
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-            100% { transform: translateY(0) rotate(360deg); }
-        }
+.avatar-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
 
-        .particles span:nth-child(1) { top: 10%; left: 20%; animation-duration: 8s; }
-        .particles span:nth-child(2) { top: 30%; left: 50%; animation-duration: 12s; }
-        .particles span:nth-child(3) { top: 50%; left: 70%; animation-duration: 10s; }
-        .particles span:nth-child(4) { top: 70%; left: 10%; animation-duration: 9s; }
-        .particles span:nth-child(5) { top: 90%; left: 40%; animation-duration: 11s; }
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
 
-        /* Animated Cartoon Characters */
-        .animated-cartoons {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
+#usernameInput {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px solid var(--accent-color);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    width: 200px;
+}
 
-        .animated-cartoons span {
-            position: absolute;
-            display: block;
-            font-size: 50px;
-            animation: float 10s infinite ease-in-out;
-        }
+.controls {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
 
-        .animated-cartoons span:nth-child(1) { top: 20%; left: 10%; animation-duration: 8s; }
-        .animated-cartoons span:nth-child(2) { top: 40%; left: 60%; animation-duration: 12s; }
-        .animated-cartoons span:nth-child(3) { top: 60%; left: 30%; animation-duration: 10s; }
-        .animated-cartoons span:nth-child(4) { top: 80%; left: 70%; animation-duration: 9s; }
-        .animated-cartoons span:nth-child(5) { top: 10%; left: 80%; animation-duration: 11s; }
+.control-button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid var(--accent-color);
+    background: var(--card-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
 
-        /* Username Input */
-        .username {
-            position: absolute;
-            top: 10px;
-            left: 20px;
-            font-size: 22px;
-            font-weight: bold;
-            background: linear-gradient(90deg, #8c0f03, #604d01);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            padding: 10px;
-            border-radius: 5px;
-            text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.8);
-        }
+.control-button:hover {
+    background: var(--accent-color);
+    color: white;
+}
 
-        #usernameInput {
-            font-size: 18px;
-            border: none;
-            background: transparent;
-            color: var(--text-color);
-            font-weight: bold;
-            text-align: left;
-            width: 120px;
-            outline: none;
-        }
+.main-container {
+    margin-top: 80px;
+    padding: 2rem;
+    display: flex;
+    gap: 2rem;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-        /* Main Container */
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            position: relative;
-            z-index: 1;
-        }
+.content-area {
+    flex: 1;
+}
 
-        h1 {
-            font-size: 60px;
-            font-weight: bold;
-            background: linear-gradient(90deg, #6208bc, #0be3e0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0;
-            padding: 20px;
-            border-radius: 15px;
-        }
+.dashboard-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    background: linear-gradient(45deg, var(--accent-color), #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+}
 
-        /* Module Cards */
-        .modules {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-        }
+.modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
 
-        .module-card {
-            padding: 20px;
-            border-radius: 15px;
-            text-decoration: none;
-            font-size: 20px;
-            font-weight: bold;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-            position: relative;
-            text-align: center;
-            width: 220px;
-            background: var(--card-bg);
-            border: 2px solid var(--card-border);
-            backdrop-filter: blur(10px);
-        }
+.module-card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 15px;
+    border: 2px solid var(--card-border);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
 
-        .module-card:hover {
-            transform: scale(1.05);
-            box-shadow: var(--card-hover-shadow);
-        }
+.module-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, var(--accent-color), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+}
 
-        .module-card:nth-child(1) {
-            background: linear-gradient(45deg, #ff619b, #9500ff);
-            animation: glowOrange 1.5s infinite alternate;
-        }
+.module-card:hover::before {
+    opacity: 0.1;
+}
 
-        @keyframes glowOrange {
-            from { box-shadow: 0px 0px 10px rgba(245, 81, 66, 0.7); }
-            to { box-shadow: 0px 0px 20px rgb(180, 145, 3); }
-        }
+.module-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--card-hover-shadow);
+}
 
-        .module-card:nth-child(2) { background: linear-gradient(45deg, #6a11cb, #2575fc); }
-        .module-card:nth-child(3) { background: linear-gradient(45deg, #f86469, #f35bc7); }
+.module-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+}
 
-        /* Games Section */
-        .games {
-            display: none;
-            margin-top: 20px;
-        }
+.module-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 1;
+}
 
-        .game-card {
-            display: block;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            color: var(--text-color);
-            text-decoration: none;
-            font-size: 24px;
-            transition: background 0.3s, transform 0.3s;
-            animation: bounce 2s infinite ease-in-out;
-        }
+.module-description {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.8;
+    position: relative;
+    z-index: 1;
+}
 
-        .game-card:hover {
-            background: rgba(255, 255, 255, 0.4);
-            transform: scale(1.05);
-        }
+.games-container {
+    display: none;
+    margin-top: 1.5rem;
+}
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+.games-container.active {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
 
-        /* Score Module */
-        .score-module {
-            margin-top: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            animation: pulse 1.5s infinite;
-        }
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
+.game-card {
+    background: var(--card-bg);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    border: 2px solid var(--card-border);
+}
 
-        /* Dark Mode Toggle */
-        .dark-mode-toggle {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-        }
+.game-card:hover {
+    transform: translateX(10px);
+    border-color: var(--accent-color);
+}
 
-        /* Feedback Section */
-        .feedback-section {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            text-align: left;
-            background: var(--card-bg);
-            border: 2px solid var(--card-border);
-            border-radius: 10px;
-            padding: 15px;
-            display: none; /* Hidden by default */
-            z-index: 2;
-        }
+.game-icon {
+    font-size: 1.5rem;
+}
 
-        .feedback-section textarea {
-            width: 200px;
-            height: 60px;
-            padding: 10px;
-            border-radius: 10px;
-            border: 2px solid var(--card-border);
-            background: var(--card-bg);
-            color: var(--text-color);
-            outline: none;
-        }
+.game-info {
+    flex: 1;
+}
 
-        .feedback-section button {
-            margin-top: 10px;
-            padding: 8px 16px;
-            border-radius: 10px;
-            border: none;
-            background: linear-gradient(45deg, #6a11cb, #2575fc);
-            color: white;
-            cursor: pointer;
-        }
+.game-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
 
-        /* Feedback Toggle Button */
-        .feedback-toggle {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: none;
-            background: linear-gradient(45deg, #6a11cb, #2575fc);
-            color: white;
-            cursor: pointer;
-            z-index: 1;
-        }
+.game-description {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
 
-        /* Language Selector */
-        .language-selector {
-            position: absolute;
-            top: 10px;
-            right: 80px;
-        }
+.side-panel {
+    width: 300px;
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
 
-        .language-selector select {
-            padding: 5px;
-            border-radius: 5px;
-            border: 2px solid var(--card-border);
-            background: var(--card-bg);
-            color: var(--text-color);
-        }
+.progress-card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-bottom: 1.5rem;
+    border: 2px solid var(--card-border);
+}
 
-        /* Progress Tracker */
-        .progress-tracker {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            text-align: right;
-        }
+.progress-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
 
-        .progress-tracker h3 {
-            margin-bottom: 10px;
-        }
+.progress-item {
+    margin-bottom: 1rem;
+}
 
-        .progress-tracker div {
-            margin-bottom: 5px;
-        }
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
 
-        /* Clear Data Section */
-        .clear-data {
-            position: absolute;
-            bottom: 100px;
-            right: 20px;
-        }
+.progress-bar {
+    height: 8px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
 
-        .clear-data button {
-            padding: 8px 16px;
-            border-radius: 10px;
-            border: none;
-            background: linear-gradient(45deg, #f86469, #f35bc7);
-            color: white;
-            cursor: pointer;
-        }
-    </style>
+.progress-fill {
+    height: 100%;
+    background: var(--accent-color);
+    transition: width 0.3s ease;
+}
+
+.feedback-drawer {
+    position: fixed;
+    bottom: 0;
+    right: -400px;
+    width: 380px;
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 15px 0 0 0;
+    transition: right 0.3s ease;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.feedback-drawer.active {
+    right: 0;
+}
+
+.feedback-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.feedback-form textarea {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 2px solid var(--card-border);
+    background: var(--card-bg);
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    resize: vertical;
+    min-height: 100px;
+}
+
+.feedback-form button {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent-color);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.feedback-form button:hover {
+    opacity: 0.9;
+}
+
+.feedback-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+.feedback-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.achievement-popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--success-color);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.achievement-popup.show {
+    transform: translateX(0);
+}
+
+@media (max-width: 1024px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .side-panel {
+        width: 100%;
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-bar {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .controls {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .main-container {
+        padding: 1rem;
+        margin-top: 120px;
+    }
+
+    .modules-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
 </head>
-
 <body>
-    <!-- Particle Animation -->
-    <div class="particles">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="avatar-section">
+            <div class="avatar" id="avatarDisplay">G</div>
+            <input type="text" id="usernameInput" placeholder="Enter your name">
+        </div>
+        <div class="controls">
+            <select class="control-button" id="language-select" onchange="changeLanguage()">
+                <option value="en">English</option>
+                <option value="hi">हिंदी</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+            </select>
+            <button class="control-button" id="darkModeToggle" onclick="toggleDarkMode()">
+                🌙
+            </button>
+        </div>
     </div>
 
-    <!-- Animated Cartoon Characters -->
-    <div class="animated-cartoons">
-        <span>🐱</span>
-        <span>🐶</span>
-        <span>🦄</span>
-        <span>🐧</span>
-        <span>🐘</span>
-    </div>
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Content Area -->
+        <div class="content-area">
+            <h1 class="dashboard-title">Welcome to the Kids Educational Game Page</h1>
 
-    <!-- Dark Mode Toggle -->
-    <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</div>
+            <!-- Modules Grid -->
+            <div class="modules-grid">
+                <!-- General Knowledge Module -->
+                <div class="module-card" data-section="general-knowledge" onclick="toggleGames('general-knowledge')">
+                    <span class="module-icon">🏆</span>
+                    <h3 class="module-title">General Knowledge</h3>
+                    <p class="module-description">Test your knowledge about the world!</p>
+                </div>
 
-    <!-- Language Selector -->
-    <div class="language-selector">
-        <select id="language-select" onchange="changeLanguage()">
-            <option value="en">English</option>
-            <option value="hi">Hindi</option>
-            <option value="es">Spanish</option>
-            <option value="fr">French</option>
-        </select>
+                <!-- Mathematics Module -->
+                <div class="module-card" data-section="mathematics" onclick="toggleGames('mathematics')">
+                    <span class="module-icon">➗</span>
+                    <h3 class="module-title">Mathematics</h3>
+                    <p class="module-description">Solve fun math problems and puzzles!</p>
+                </div>
+
+                <!-- Lectures Module -->
+                <div class="module-card" data-section="lectures" onclick="toggleGames('lectures')">
+                    <span class="module-icon">📚</span>
+                    <h3 class="module-title">Lectures</h3>
+                    <p class="module-description">Learn new topics with interactive lectures!</p>
+                </div>
+            </div>
+
+            <!-- Games Container -->
+            <div id="general-knowledge" class="games-container">
+                <a href="./solar_quiz.html" class="game-card" onclick="incrementScore('gk')">
+                    <span class="game-icon">🚀</span>
+                    <div class="game-info">
+                        <h4 class="game-title">Solar System Quiz</h4>
+                        <p class="game-description">Learn about planets and stars!</p>
+                    </div>
+                </a>
+                <a href="./alphabet_game.html" class="game-card" onclick="incrementScore('gk')">
+                    <span class="game-icon">🔠</span>
+                    <div class="game-info">
+                        <h4 class="game-title">Alphabet Sorting</h4>
+                        <p class="game-description">Sort letters and learn the alphabet!</p>
+                    </div>
+                </a>
+            </div>
+
+            <div id="mathematics" class="games-container">
+                <a href="./math-quiz.html" class="game-card" onclick="incrementScore('math')">
+                    <span class="game-icon">🧮</span>
+                    <div class="game-info">
+                        <h4 class="game-title">Maths Quiz</h4>
+                        <p class="game-description">Solve fun math problems!</p>
+                    </div>
+                </a>
+                <a href="./shape-matching.html" class="game-card" onclick="incrementScore('math')">
+                    <span class="game-icon">📐</span>
+                    <div class="game-info">
+                        <h4 class="game-title">Geometry Quiz</h4>
+                        <p class="game-description">Match shapes and learn geometry!</p>
+                    </div>
+                </a>
+            </div>
+
+            <div id="lectures" class="games-container">
+                <a href="./lecture.html" class="game-card">
+                    <span class="game-icon">📖</span>
+                    <div class="game-info">
+                        <h4 class="game-title">Educational Lectures</h4>
+                        <p class="game-description">Learn new topics with interactive lectures!</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Side Panel -->
+        <div class="side-panel">
+            <!-- Progress Card -->
+            <div class="progress-card">
+                <h3 class="progress-title">Progress</h3>
+                <div class="progress-item">
+                    <div class="progress-label">General Knowledge</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-gk" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">Mathematics</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-math" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Score Section -->
+            <div class="score-section">
+                <h3>Scores</h3>
+                <p>General Knowledge: <span id="score-gk">0</span></p>
+                <p>Mathematics: <span id="score-math">0</span></p>
+            </div>
+        </div>
     </div>
 
     <!-- Feedback Toggle Button -->
-    <button class="feedback-toggle" onclick="toggleFeedback()">Give Feedback</button>
+    <button class="feedback-toggle" onclick="toggleFeedback()">Feedback</button>
 
-    <!-- Feedback Section -->
-    <div class="feedback-section">
-        <h3>Feedback</h3>
-        <textarea id="feedback-input" placeholder="Your feedback..."></textarea>
-        <button onclick="submitFeedback()">Submit</button>
-        <p>Contact: 9322635506</p>
+    <!-- Feedback Drawer -->
+    <div class="feedback-drawer" id="feedbackDrawer">
+        <h3 class="feedback-title">Share Your Feedback</h3>
+        <form class="feedback-form" id="feedbackForm">
+            <textarea placeholder="Tell us what you think..." rows="4" required></textarea>
+            <button type="submit">Submit Feedback</button>
+        </form>
     </div>
 
-    <!-- Progress Tracker -->
-    <div class="progress-tracker">
-        <h3>Progress</h3>
-        <div>General Knowledge: <span id="progress-gk">0%</span></div>
-        <div>Mathematics: <span id="progress-math">0%</span></div>
+    <!-- Achievement Popup -->
+    <div class="achievement-popup" id="achievementPopup">
+        🎉 Achievement Unlocked!
     </div>
 
-    <!-- Clear Data Section -->
-    <div class="clear-data">
-        <button onclick="clearData()">Clear All Data</button>
-    </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const usernameInput = document.getElementById('usernameInput');
+    const avatarDisplay = document.getElementById('avatarDisplay');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const languageSelect = document.getElementById('language-select');
+    const gamesSections = document.querySelectorAll('.games');
+    const moduleCards = document.querySelectorAll('.module-card');
 
-    <!-- Your existing HTML content -->
-    <div class="username">User: <input type="text" id="usernameInput" placeholder="Enter your name"></div>
-    <div class="container">
-        <h1>Welcome to the Kids Educational Game Page</h1>
-        <div class="modules">
-            <div class="module-card" onclick="toggleGames('general-knowledge')">
-                <span style="font-size: 35px;">🏆</span> <span>General Knowledge</span>
-            </div>
-            <div class="module-card" onclick="toggleGames('mathematics')">
-                <span style="font-size: 35px;">➗</span> Mathematics
-            </div>
-            <div class="module-card" onclick="toggleGames('lectures')">
-                <span style="font-size: 35px;">📚</span> <span>Lectures</span>
-            </div>
-        </div>
+    let scores = JSON.parse(localStorage.getItem('userScores')) || { gk: 0, math: 0 };
+    let progress = JSON.parse(localStorage.getItem('userProgress')) || { gk: 0, math: 0 };
 
-        <div id="general-knowledge" class="games">
-            <a href="./solar_quiz.html" class="game-card" onclick="incrementScore('score-gk')">🚀 Solar System Quiz</a>
-            <a href="./alphabet_game.html" class="game-card" onclick="incrementScore('score-gk')">🔠 Alphabet Sorting</a>
-            <div class="score-module">🌍 General Knowledge Score: <span id="score-gk">0</span></div>
-        </div>
+    function updateAvatarDisplay() {
+        const username = usernameInput.value.trim() ? usernameInput.value.trim() : "Guest";
+        avatarDisplay.textContent = username ? username[0].toUpperCase() : 'G';
+    }
 
-        <div id="mathematics" class="games">
-            <a href="./math-quiz.html" class="game-card" onclick="incrementScore('score-math')">🧮 Maths Quiz</a>
-            <a href="./shape-matching.html" class="game-card" onclick="incrementScore('score-math')">Geometry Quiz</a>
-            <div class="score-module">➗ Mathematics Score: <span id="score-math">0</span></div>
-        </div>
-
-        <div id="lectures" class="games">
-            <a href="./lecture.html" class="game-card">📖 Educational Lectures</a>
-        </div>
-    </div>
-
-    <script>
-        // Dark Mode Toggle
-        function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
-            localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
-        }
-
-        // Check for saved dark mode preference
-        if (localStorage.getItem("dark-mode") === "true") {
-            document.body.classList.add("dark-mode");
-        }
-
-        // Language Selector
-        function changeLanguage() {
-            const selectedLanguage = document.getElementById("language-select").value;
-            localStorage.setItem("language", selectedLanguage);
-            alert(`Language changed to ${selectedLanguage}.`);
-        }
-
-        // Feedback Section Toggle
-        function toggleFeedback() {
-            const feedbackSection = document.querySelector(".feedback-section");
-            feedbackSection.style.display = feedbackSection.style.display === "block" ? "none" : "block";
-        }
-
-        // Feedback Submission
-        function submitFeedback() {
-            const feedback = document.getElementById("feedback-input").value;
-            if (feedback.trim() === "") {
-                alert("Please enter your feedback.");
-                return;
+    function toggleGames(sectionId) {
+                console.log('Toggling section:', sectionId); // Debug log
+                
+                const targetSection = document.getElementById(sectionId);
+                if (!targetSection) {
+                    console.error('Section not found:', sectionId);
+                    return;
+                }
+    
+                // If the clicked section is already active, hide it
+                if (targetSection.classList.contains('active')) {
+                    targetSection.classList.remove('active');
+                } else {
+                    // Hide all sections first
+                    gamesSections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    // Show the clicked section
+                    targetSection.classList.add('active');
+                }
             }
-            // Replace with your Google Form URL
-            const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSf...";
-            window.open(`${googleFormURL}?entry.1234567890=${encodeURIComponent(feedback)}`, "_blank");
-            alert("Thank you for your feedback!");
-            document.getElementById("feedback-input").value = "";
-            toggleFeedback(); // Hide feedback section after submission
-        }
 
-        // Progress Tracker
-        function updateProgress() {
-            const scores = JSON.parse(localStorage.getItem(`${usernameInput.value.trim() || "Guest"}-scores`) || "{}");
-            const gkProgress = ((scores.generalKnowledge || 0) / 10) * 100;
-            const mathProgress = ((scores.mathematics || 0) / 10) * 100;
-            document.getElementById("progress-gk").textContent = `${gkProgress}%`;
-            document.getElementById("progress-math").textContent = `${mathProgress}%`;
-        }
+    function updateUI() {
+        document.getElementById('score-gk').textContent = scores.gk;
+        document.getElementById('score-math').textContent = scores.math;
+        document.getElementById('progress-gk').style.width = `${progress.gk}%`;
+        document.getElementById('progress-math').style.width = `${progress.math}%`;
+    }
 
-        // Clear All Data
-        function clearData() {
-            if (confirm("Are you sure you want to clear all data? This cannot be undone.")) {
-                localStorage.clear();
-                alert("All data has been cleared.");
-                window.location.reload();
-            }
-        }
+    function incrementScore(module) {
+        scores[module] += 10;
+        progress[module] = Math.min(100, progress[module] + 5);
+        localStorage.setItem('userScores', JSON.stringify(scores));
+        localStorage.setItem('userProgress', JSON.stringify(progress));
+        updateUI();
+    }
 
-        // Update progress on page load
-        updateProgress();
-    </script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode'));
+        darkModeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    }
+
+    function changeLanguage() {
+        localStorage.setItem('language', languageSelect.value);
+    }
+
+    function toggleFeedback() {
+        document.getElementById('feedbackDrawer').classList.toggle('active');
+    }
+
+    usernameInput.addEventListener('input', function () {
+        localStorage.setItem('username', this.value);
+        updateAvatarDisplay();
+    });
+
+    moduleCards.forEach(card => {
+        card.addEventListener('click', function () {
+            toggleGames(this.getAttribute('data-section'));
+        });
+    });
+
+    darkModeToggle.addEventListener('click', toggleDarkMode);
+    languageSelect.addEventListener('change', changeLanguage);
+
+    if (localStorage.getItem('dark-mode') === 'true') {
+        document.body.classList.add('dark-mode');
+        darkModeToggle.textContent = '☀️';
+    }
+
+    const savedLanguage = localStorage.getItem('language');
+    if (savedLanguage) languageSelect.value = savedLanguage;
+
+    updateUI();
+    updateAvatarDisplay();
+});
+</script>
 </body>
+
+</html>
