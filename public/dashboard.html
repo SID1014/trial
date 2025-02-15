@@ -8,8 +8,8 @@
     <style>
         :root {
     --background-gradient: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
-    --text-color: #2d3748;
-    --card-bg: rgba(255, 255, 255, 0.95);
+    --text-color: #f8f8fa;
+    --card-bg: #59589c;
     --card-border: rgba(0, 0, 0, 0.1);
     --card-hover-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     --accent-color: #4c51bf;
@@ -108,7 +108,7 @@ body {
 
 .control-button:hover {
     background: var(--accent-color);
-    color: white;
+    color: rgb(244, 86, 86);
 }
 
 .main-container {
@@ -293,7 +293,6 @@ body {
     background: var(--accent-color);
     transition: width 0.3s ease;
 }
-
 .feedback-drawer {
     position: fixed;
     bottom: 0;
@@ -365,6 +364,23 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
+
+.achievement-popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--success-color);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
 
 .achievement-popup {
     position: fixed;
@@ -545,17 +561,17 @@ body {
     </div>
 
     <!-- Feedback Toggle Button -->
-    <button class="feedback-toggle" onclick="toggleFeedback()">Feedback</button>
+   
 
     <!-- Feedback Drawer -->
+    <button class="feedback-toggle" onclick="toggleFeedback()"><a href="https://docs.google.com/forms/d/1ANsPpQq-G1GBqm24cezp1im0FW0aYeqpG4RfnXkWiLU/edit">Feedback</a></button>
     <div class="feedback-drawer" id="feedbackDrawer">
-        <h3 class="feedback-title">Share Your Feedback</h3>
+        <h3>Share Your Feedback</h3>
         <form class="feedback-form" id="feedbackForm">
             <textarea placeholder="Tell us what you think..." rows="4" required></textarea>
             <button type="submit">Submit Feedback</button>
         </form>
     </div>
-
     <!-- Achievement Popup -->
     <div class="achievement-popup" id="achievementPopup">
         🎉 Achievement Unlocked!
@@ -626,9 +642,51 @@ body {
     }
 
     function toggleFeedback() {
-        document.getElementById('feedbackDrawer').classList.toggle('active');
-    }
-
+                const drawer = document.getElementById('feedbackDrawer');
+                if (drawer) {
+                    drawer.classList.toggle('active');
+                }
+            }
+    
+            // Handle feedback submission
+            const feedbackForm = document.getElementById('feedbackForm');
+            if (feedbackForm) {
+                feedbackForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const feedback = this.querySelector('textarea').value;
+                    
+                    // Google Forms integration
+                    const formData = new FormData();
+                    formData.append('entry.1234567890', feedback); // Replace with your actual Google Form field ID
+    
+                    fetch('https://docs.google.com/forms/d/1ANsPpQq-G1GBqm24cezp1im0FW0aYeqpG4RfnXkWiLU/edit', { // Replace with your actual Google Form URL
+                        method: 'POST',
+                        body: formData,
+                        mode: 'no-cors' // Added to handle CORS issues
+                    }).then(() => {
+                        alert('Thank you for your feedback!');
+                        this.reset();
+                        toggleFeedback();
+                    }).catch(error => {
+                        console.error('Error:', error);
+                        alert('There was an error submitting your feedback. Please try again.');
+                    });
+                });
+            }
+    
+            // Initialize username
+            if (usernameInput) {
+                const savedUsername = localStorage.getItem('username');
+                if (savedUsername) {
+                    usernameInput.value = savedUsername;
+                    updateAvatarDisplay();
+                }
+    
+                usernameInput.addEventListener('input', function() {
+                    localStorage.setItem('username', this.value);
+                    updateAvatarDisplay();
+                });
+            }
     usernameInput.addEventListener('input', function () {
         localStorage.setItem('username', this.value);
         updateAvatarDisplay();
@@ -653,6 +711,7 @@ body {
 
     updateUI();
     updateAvatarDisplay();
+    
 });
 </script>
 </body>
