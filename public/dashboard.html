@@ -108,7 +108,7 @@ body {
 
 .control-button:hover {
     background: var(--accent-color);
-    color: rgb(244, 86, 86);
+    color: rgb(244, 237, 237);
 }
 
 .main-container {
@@ -444,7 +444,7 @@ body {
             <input type="text" id="usernameInput" placeholder="Enter your name">
         </div>
         <div class="controls">
-            <select class="control-button" id="language-select" onchange="changeLanguage()">
+            <select class="control-button" id="language-selector" onchange="changeLanguage()">
                 <option value="en">English</option>
                 <option value="hi">हिंदी</option>
                 <option value="es">Español</option>
@@ -630,16 +630,80 @@ body {
         localStorage.setItem('userProgress', JSON.stringify(progress));
         updateUI();
     }
+//     const API_KEY = "AIzaSyBmIWZ5prsO4q912tcv1CmMu0I7UXBe2-c"; // Replace with your actual Gemini API key
 
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode'));
-        darkModeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-    }
+// // Function to fetch all text from the HTML and translate it
+// async function translatePage(targetLanguage) {
+//     // Select all elements containing text (you can customize this selector)
+//     const textElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, a, li, button, label, input[placeholder]');
 
-    function changeLanguage() {
-        localStorage.setItem('language', languageSelect.value);
-    }
+//     // Extract text content from these elements
+//     const texts = Array.from(textElements).map(element => {
+//         return element.textContent || element.getAttribute('placeholder');
+//     });
+
+//     try {
+//         // Translate the text using Gemini API
+//         const translatedTexts = await translateTextWithGemini(texts, targetLanguage);
+
+//         // Update the HTML with translated text
+//         textElements.forEach((element, index) => {
+//             if (element.tagName === 'INPUT' && element.getAttribute('placeholder')) {
+//                 // Update placeholder text for input elements
+//                 element.setAttribute('placeholder', translatedTexts[index]);
+//             } else {
+//                 // Update text content for other elements
+//                 element.textContent = translatedTexts[index];
+//             }
+//         });
+//     } catch (error) {
+//         console.error('Error translating text:', error);
+//     }
+// }
+
+// Function to translate text using Gemini API
+// async function translateTextWithGemini(texts, targetLanguage) {
+//     const GEMINI_API_KEY = 'AIzaSyBmIWZ5prsO4q912tcv1CmMu0I7UXBe2-c'; // Replace with your Gemini API key
+//     const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'; // Replace with the actual Gemini API endpoint
+
+   // Function to fetch all text from the HTML and translate it
+//    
+const apiKey = GEMINI_API_KEY; // Replace with your actual API key
+const elementsToTranslate = ["title", "description", "start_game"];
+
+document.getElementById("language-selector").addEventListener("change", function () {
+    const selectedLang = this.value;
+    
+    elementsToTranslate.forEach(id => {
+        let text = document.getElementById(id).textContent;
+        translateText(text, selectedLang, id);
+    });
+
+    localStorage.setItem("lang", selectedLang); // Save language preference
+});
+
+function translateText(text, targetLang, elementId) {
+    const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
+
+    fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ q: text, target: targetLang })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById(elementId).textContent = data.data.translations[0].translatedText;
+    })
+    .catch(error => console.error("Error:", error));
+}
+
+// Load saved language
+window.onload = function () {
+    const savedLang = localStorage.getItem("lang") || "en";
+    document.getElementById("language-selector").value = savedLang;
+    document.getElementById("language-selector").dispatchEvent(new Event("change"));
+};
+
 
     function toggleFeedback() {
                 const drawer = document.getElementById('feedbackDrawer');

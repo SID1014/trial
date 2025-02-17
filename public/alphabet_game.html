@@ -227,30 +227,46 @@
         }
 
         document.querySelectorAll(".drop-zone").forEach(zone => {
-            zone.addEventListener("dragover", (event) => {
-                event.preventDefault();
-            });
-            zone.addEventListener("drop", (event) => {
-                event.preventDefault();
-                const letter = event.dataTransfer.getData("text");
-                const draggedElement = document.querySelector(`.letter:contains('${letter}')`);
-                if (draggedElement) {
-                    draggedElement.remove(); // Remove the dragged element from its original position
-                }
-                if ((zone.id === "vowels" && vowels.includes(letter)) || (zone.id === "consonants" && !vowels.includes(letter))) {
-                    zone.classList.add("correct");
-                    document.getElementById("message").textContent = "Correct! 🎉";
-                    correctCount++;
-                } else {
-                    zone.classList.add("incorrect");
-                    document.getElementById("message").textContent = "Incorrect! 😢";
-                }
-                const droppedContainer = zone.id === "vowels" ? document.getElementById("vowel-letters") : document.getElementById("consonant-letters");
-                droppedContainer.textContent += letter + " ";
-                updateProgress();
-                setTimeout(() => { document.getElementById("message").textContent = ""; }, 1000);
-            });
-        });
+    zone.addEventListener("dragover", (event) => {
+        event.preventDefault();
+    });
+
+    zone.addEventListener("drop", (event) => {
+        event.preventDefault();
+        const letter = event.dataTransfer.getData("text");
+
+        // Find dragged element properly
+        const draggedElement = [...document.querySelectorAll(".letter")].find(el => el.textContent === letter);
+        if (draggedElement) {
+            draggedElement.remove();
+        }
+
+        // Remove previous styles
+        zone.classList.remove("correct", "incorrect");
+
+        // Correct checking logic
+        if ((zone.id === "vowels" && vowels.includes(letter)) || (zone.id === "consonants" && !vowels.includes(letter))) {
+            zone.classList.add("correct");
+            document.getElementById("message").textContent = "Correct! 🎉";
+            correctCount++; // Only increase on correct drop
+        } else {
+            zone.classList.add("incorrect");
+            document.getElementById("message").textContent = "Incorrect! 😢";
+        }
+
+        // Append the letter to the drop zone
+        const droppedContainer = zone.id === "vowels" ? document.getElementById("vowel-letters") : document.getElementById("consonant-letters");
+        const span = document.createElement("span");
+        span.textContent = letter + " ";
+        droppedContainer.appendChild(span);
+
+        updateProgress();
+
+        // Reset message after 1 second
+        setTimeout(() => { document.getElementById("message").textContent = ""; }, 1000);
+    });
+});
+
 
         function updateProgress() {
             const progress = (correctCount / totalLetters) * 100;
